@@ -1,14 +1,13 @@
-import {Client} from "discord.js";
-import * as dotenv from "dotenv";
+import { Client } from "discord.js";
+import { DISCORD } from "./constants/env";
+import { setupLogging, Log } from "./logging";
 
-dotenv.config();
+setupLogging();
+
 const client = new Client();
 
 client.on("ready", () => {
-    console.log(`Logged in as ${client.user?.tag}`);
+  Log.debug(`Logged in as ${client.user?.username}`);
 });
 
-const token = process.env.TOKEN;
-console.log(token);
-
-client.login(process.env.TOKEN);
+client.login(DISCORD.TOKEN);
