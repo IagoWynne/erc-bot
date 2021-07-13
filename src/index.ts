@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { DISCORD } from "./constants/env";
+import config from "./config";
 import { setupLogging, Log } from "./logging";
 
 setupLogging();
@@ -10,4 +10,4 @@ client.on("ready", () => {
   Log.debug(`Logged in as ${client.user?.username}`);
 });
 
-client.login(DISCORD.TOKEN);
+client.login(config.discord.token);
