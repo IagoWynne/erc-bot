@@ -1,10 +1,13 @@
 import { Client } from "discord.js";
 import config from "./config";
-import { setupLogging, Log } from "./logging";
+import { initLogging, Log } from "./logging";
+import initMonitor from "./monitor";
 
-setupLogging();
+initLogging();
 
 const client = new Client();
+
+initMonitor(client);
 
 client.on("ready", () => {
   Log.debug(`Logged in as ${client.user?.username}`);

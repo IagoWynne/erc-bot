@@ -15,7 +15,7 @@ const printFromatting = winston.format.printf(
   (info) => `[${info.timestamp}][${info.level}]: ${info.message}`
 );
 
-const setupConsoleLogging = () =>
+const initConsoleLogging = () =>
   winston.add(
     new winston.transports.Console({
       level: config.logging.consoleLogLevel,
@@ -36,14 +36,14 @@ const addLogFile = (fileConfig: LogFile) =>
     })
   );
 
-const setupFileLogging = () =>
+const initFileLogging = () =>
   forEach((fileConfig: LogFile) => addLogFile(fileConfig))(
     config.logging.files
   );
 
-const setupLogging = compose(
-  config.logging.enableConsoleLogs ? setupConsoleLogging : () => {},
-  setupFileLogging
+const initLogging = compose(
+  config.logging.enableConsoleLogs ? initConsoleLogging : () => {},
+  initFileLogging
 );
 
-export default setupLogging;
+export default initLogging;
