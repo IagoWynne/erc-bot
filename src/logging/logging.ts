@@ -1,7 +1,7 @@
 import { compose, forEach } from "ramda";
 import * as winston from "winston";
 import config from "../config";
-import { LogFile } from "../types/config";
+import LogFile from "../types/config/logging/logFile";
 
 const timestampFormatting = winston.format.timestamp({
   format: "YYYY-MM-DD HH:mm:ss",

@@ -1,4 +1,4 @@
-import { Config } from "./types/config";
+import Config from "./types/config/config";
 
 const config: Config = {
   discord: {
@@ -28,6 +28,10 @@ const config: Config = {
         logLevel: "info",
       },
     ],
+  },
+  commands: {
+    prefix: ".",
+    helpMessage: "",
   },
 };
 
