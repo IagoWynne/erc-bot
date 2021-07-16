@@ -119,7 +119,9 @@ const onMessageDeleted = (message: Message | PartialMessage): void => {
   const author = getUserName(message.member, message.author);
   const channelName = getChannelName(message);
 
-  Log.debug(`Message from ${author} deleted: ${message}`);
+  Log.debug(
+    `Message from ${author} in ${channelName} deleted: ${message.content}`
+  );
 
   sendChatlogMessage(
     {
@@ -127,7 +129,9 @@ const onMessageDeleted = (message: Message | PartialMessage): void => {
       iconURL: message.author?.avatarURL() || undefined,
     },
     config.discord.logColours.messageDeleted,
-    `Message Deleted ${channelName}`,
+    `**Message Deleted** ${channelName}${
+      message.author ? ` - ${message.author?.tag}` : ""
+    }`,
     message.content || undefined
   );
 };
@@ -140,8 +144,13 @@ const onMessageUpdated = (message: Message | PartialMessage): void => {
   const updatedMessage = message.channel.messages.cache.get(message.id);
 
   const author = getUserName(message.member, message.author);
+  const channelName = getChannelName(message);
 
-  Log.debug(`Message from ${author} in #${message.channel} edited: ${message}`);
+  Log.debug(
+    `Message from ${author} (${
+      message.author ? `${message.author.tag}` : "could not retrieve tag"
+    }) in #${channelName} edited to: ${updatedMessage?.content}`
+  );
 
   sendChatlogMessage(
     {
@@ -149,7 +158,9 @@ const onMessageUpdated = (message: Message | PartialMessage): void => {
       iconURL: message.author?.avatarURL() || undefined,
     },
     config.discord.logColours.messageUpdated,
-    "Message Edited `#${message.channel}`",
+    `**Message Edited** ${channelName}${
+      message.author ? ` - ${message.author?.tag}` : ""
+    }${message.channel.type !== "dm" ? ` (${message.url})` : ""}`,
     updatedMessage?.content || undefined
   );
 };
