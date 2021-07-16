@@ -27,6 +27,14 @@ const initMonitor = (client: Client) => {
   Log.debug("Initiating monitor");
 
   discordClient = client;
+  fetchGuild();
+
+  setupListeners();
+
+  Log.debug("Monitor intiated");
+};
+
+const fetchGuild = () => {
   discordClient.guilds.fetch(config.discord.guildId);
 
   const clientGuild = discordClient.guilds.cache.get(config.discord.guildId);
@@ -41,17 +49,25 @@ const initMonitor = (client: Client) => {
   guild.channels.cache.forEach((channel: GuildChannel) => {
     channel.fetch();
   });
-
-  const logMessage = sendChatlogMessage(client);
-
-  client.on("message", onMessageEvent(logMessage, handleCreatedMessage));
-  client.on("messageDelete", onMessageEvent(logMessage, handleDeletedMessage));
-  client.on("messageUpdate", onMessageEvent(logMessage, handleUpdatedMessage));
-  client.on("guildMemberAdd", compose(logMessage, handleJoinedServer));
-  client.on("guildMemberRemove", compose(logMessage, handleLeftServer));
-
-  Log.debug("Monitor intiated");
 };
+
+const setupListeners = () => {
+  const logMessage = sendChatlogMessage(discordClient);
+
+  discordClient.on("message", onMessageEvent(logMessage, handleCreatedMessage));
+  discordClient.on(
+    "messageDelete",
+    onMessageEvent(logMessage, handleDeletedMessage)
+  );
+  discordClient.on(
+    "messageUpdate",
+    onMessageEvent(logMessage, handleUpdatedMessage)
+  );
+  discordClient.on("guildMemberAdd", compose(logMessage, handleJoinedServer));
+  discordClient.on("guildMemberRemove", compose(logMessage, handleLeftServer));
+};
+
+//todo: refactor all this stuff into separate files for each event type
 
 const onMessageEvent =
   (
