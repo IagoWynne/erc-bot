@@ -1,8 +1,7 @@
 import { Message, GuildMember, Role, User } from "discord.js";
-import { find, includes, split } from "ramda";
-import config from "../config";
-import { Log } from "../logging";
-import RoleMatchConfig from "../types/config/commands/roleMatchConfig";
+import { Log } from "../../logging";
+import getRoleAlias from "./getRoleAlias";
+import getRoleId from "./getRoleId";
 
 const handleAddRoleCommand = async (
   findGuildMember: (id: string) => Promise<GuildMember>,
@@ -19,7 +18,7 @@ const handleAddRoleCommand = async (
     return;
   }
 
-  const roleAlias = split(" ")(message.content)[1];
+  const roleAlias = getRoleAlias(message.content);
 
   const roleId = getRoleId(roleAlias);
   const role = roleId ? await findGuildRole(roleId) : undefined;
@@ -44,18 +43,12 @@ const handleAddRoleCommand = async (
     guildMember.roles.add(role);
     sendDm(guildMember.user, `Added role ${role.name}`);
   } catch (e) {
+    Log.error(e);
     sendDm(
       guildMember.user,
       `There was an error adding the role ${role.name}. Please contact an admin for assistance.`
     );
   }
 };
-
-const getRoleId = (roleAlias: string) =>
-  find(
-    (roleMatchConfig: RoleMatchConfig) =>
-      includes(roleAlias, roleMatchConfig.aliases),
-    config.commands.roles
-  )?.roleId;
 
 export default handleAddRoleCommand;

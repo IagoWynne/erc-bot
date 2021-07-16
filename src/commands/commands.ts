@@ -2,8 +2,9 @@ import { Client, Guild, GuildMember, Message, Role, User } from "discord.js";
 import { compose, curry, ifElse, slice, split, startsWith } from "ramda";
 import config from "../config";
 import { Log } from "../logging";
-import handleAddRoleCommand from "./handleAddRoleCommand";
+import handleAddRoleCommand from "./roles/handleAddRoleCommand";
 import handleHelpCommand from "./handleHelpCommand";
+import handleRemoveRoleCommand from "./roles/handleRemoveRoleCommand";
 
 let discordClient: Client;
 let guild: Guild;
@@ -45,6 +46,14 @@ const matchCommand = (
     case "iam": {
       Log.debug(`Matched ${messageContent} to iam command`);
       return curry(handleAddRoleCommand)(
+        findGuildMember,
+        findGuildRole,
+        sendDmToUser
+      );
+    }
+    case "iamnot": {
+      Log.debug(`Matched ${messageContent} to iamnot command`);
+      return curry(handleRemoveRoleCommand)(
         findGuildMember,
         findGuildRole,
         sendDmToUser
