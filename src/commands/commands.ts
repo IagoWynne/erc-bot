@@ -1,14 +1,17 @@
-import { Client, Message, User } from "discord.js";
-import { compose, curry, ifElse, slice, startsWith } from "ramda";
+import { Client, Guild, GuildMember, Message, Role, User } from "discord.js";
+import { compose, curry, ifElse, slice, split, startsWith } from "ramda";
 import config from "../config";
 import { Log } from "../logging";
-import handleHelpCommand from "./help/handleHelpCommand";
+import handleAddRoleCommand from "./handleAddRoleCommand";
+import handleHelpCommand from "./handleHelpCommand";
 
 let discordClient: Client;
+let guild: Guild;
 
-const initCommands = (client: Client) => {
+const initCommands = async (client: Client) => {
   Log.debug("Initialising command handlers...");
   discordClient = client;
+  guild = await discordClient.guilds.fetch(config.discord.guildId);
 
   client.on(
     "message",
@@ -34,13 +37,19 @@ const matchCommand = (
 ): ((m: Message) => void) | undefined => {
   Log.debug(`Received potential command: ${messageContent}`);
 
-  if (messageContent === "help") {
-    Log.debug(`Matched ${messageContent} to help command`);
-    return curry(handleHelpCommand)(
-      findUser,
-      sendDmToUser,
-      deleteTriggerMessage
-    );
+  switch (split(" ", messageContent)[0]) {
+    case "help": {
+      Log.debug(`Matched ${messageContent} to help command`);
+      return curry(handleHelpCommand)(findUser, sendDmToUser);
+    }
+    case "iam": {
+      Log.debug(`Matched ${messageContent} to iam command`);
+      return curry(handleAddRoleCommand)(
+        findGuildMember,
+        findGuildRole,
+        sendDmToUser
+      );
+    }
   }
 
   Log.debug(`${messageContent} did not match any command`);
@@ -58,6 +67,7 @@ const handleMessage = (message: Message) => {
 
   if (command) {
     command(message);
+    deleteTriggerMessage(message);
   }
 };
 
@@ -77,7 +87,6 @@ const sendDmToUser = async (user: User, message: string) => {
   try {
     await user.send(message);
   } catch (e) {
-    Log.debug(e);
     Log.error(e);
   }
 };
@@ -90,6 +99,26 @@ const deleteTriggerMessage = async (message: Message) => {
   } catch (e) {
     Log.error(e);
   }
+};
+
+const findGuildMember = async (id: string): Promise<GuildMember> => {
+  const guildMember = await guild.members.fetch(id);
+
+  if (!guildMember) {
+    Log.warn(`Could not find user with id ${id} in server`);
+  }
+
+  return guildMember;
+};
+
+const findGuildRole = async (id: string): Promise<Role | null> => {
+  const role = await guild.roles.fetch(id);
+
+  if (!role) {
+    Log.warn(`Could not find role with id ${id} in server`);
+  }
+
+  return role;
 };
 
 export default initCommands;
