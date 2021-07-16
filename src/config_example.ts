@@ -31,6 +31,35 @@ const config: Config = {
   },
   commands: {
     prefix: ".",
+    roles: [
+      {
+        roleId: "123",
+        aliases: ["casters", "caster", "mage", "smn", "blm", "rdm"],
+      },
+      {
+        roleId: "123",
+        aliases: ["ranged", "rangeds", "mch", "brd", "dnc"],
+      },
+      {
+        roleId: "123",
+        aliases: ["melee", "melees", "mnk", "nin", "sam", "drg"],
+      },
+      { roleId: "123", aliases: ["healer", "whm", "sch", "ast"] },
+      { roleId: "123", aliases: ["tanks", "pld", "drk", "war", "tank", "gnb"] },
+      { roleId: "Guest", aliases: ["guest"] },
+      {
+        roleId: "123",
+        aliases: ["chaos", "datacenter chaos", "data center chaos", "dc chaos"],
+      },
+      {
+        roleId: "123",
+        aliases: ["datacenter light", "data center light", "light", "dc light"],
+      },
+      {
+        roleId: "123",
+        aliases: ["raidlead", "raidleader", "rl", "raidleaders", "raid lead"],
+      },
+    ],
     helpMessage: "",
   },
 };
