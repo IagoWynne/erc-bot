@@ -24,7 +24,7 @@ let discordClient: Client;
 let guild: Guild;
 
 const initMonitor = (client: Client) => {
-  Log.debug("Initiating monitor");
+  Log.debug("Initialising monitor");
 
   discordClient = client;
   fetchGuild();
