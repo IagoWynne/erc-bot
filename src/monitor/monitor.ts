@@ -1,21 +1,24 @@
 import {
   Client,
-  ColorResolvable,
   Guild,
   GuildChannel,
-  GuildChannelManager,
-  GuildManager,
   GuildMember,
   Message,
-  MessageEmbed,
   PartialGuildMember,
   PartialMessage,
-  TextChannel,
   User,
 } from "discord.js";
-import { forEach } from "ramda";
+import { compose, isEmpty } from "ramda";
 import config from "../config";
 import { Log } from "../logging";
+import sendChatlogMessage from "./chatLog/sendChatLogMessage";
+import {
+  makeBold,
+  addChannelName,
+  addAuthorTag,
+  addMessageUrl,
+} from "./chatLog/formatMessages";
+import ChatLogInfo from "../types/monitor/chatLogInfo";
 
 let discordClient: Client;
 let guild: Guild;
@@ -39,32 +42,46 @@ const initMonitor = (client: Client) => {
     channel.fetch();
   });
 
-  client.on("message", onMessageCreated);
-  client.on("messageDelete", onMessageDeleted);
-  client.on("messageUpdate", onMessageUpdated);
-  client.on("guildMemberAdd", onJoinedServer);
-  client.on("guildMemberRemove", onLeftServer);
+  const logMessage = sendChatlogMessage(client);
+
+  client.on("message", onMessageEvent(logMessage, handleCreatedMessage));
+  client.on("messageDelete", onMessageEvent(logMessage, handleDeletedMessage));
+  client.on("messageUpdate", onMessageEvent(logMessage, handleUpdatedMessage));
+  client.on("guildMemberAdd", compose(logMessage, handleJoinedServer));
+  client.on("guildMemberRemove", compose(logMessage, handleLeftServer));
 
   Log.debug("Monitor intiated");
 };
 
-const onJoinedServer = (member: GuildMember) => {
+const onMessageEvent =
+  (
+    messageEventLogger: (info: ChatLogInfo) => void,
+    messageEventHandler: (message: Message | PartialMessage) => ChatLogInfo
+  ) =>
+  (message: Message | PartialMessage) =>
+    shouldLogMessage(message)
+      ? compose(messageEventLogger, messageEventHandler)(message)
+      : null;
+
+const handleJoinedServer = (member: GuildMember): ChatLogInfo => {
   const memberUsername = getUserName(member, member.user);
 
   Log.debug(`New Member: ${memberUsername} (${member.user.tag})`);
 
-  sendChatlogMessage(
-    {
+  return {
+    author: {
       name: memberUsername,
       iconURL: member.user.avatarURL() || undefined,
     },
-    config.discord.logColours.userJoined,
-    "**User Joined**",
-    `ID: ${member.user.id}\nTag: ${member.user.tag}`
-  );
+    colour: config.discord.logColours.userJoined,
+    description: makeBold("User Joined"),
+    content: `ID: ${member.user.id}\nTag: ${member.user.tag}`,
+  };
 };
 
-const onLeftServer = (member: GuildMember | PartialGuildMember): void => {
+const handleLeftServer = (
+  member: GuildMember | PartialGuildMember
+): ChatLogInfo => {
   const memberUsername = getUserName(member, member.user);
 
   Log.debug(
@@ -73,49 +90,50 @@ const onLeftServer = (member: GuildMember | PartialGuildMember): void => {
     }`
   );
 
-  sendChatlogMessage(
-    {
+  return {
+    author: {
       name: memberUsername,
       iconURL: member.user?.avatarURL() || undefined,
     },
-    config.discord.logColours.userLeft,
-    "**User Left**",
-    member.user
+    colour: config.discord.logColours.userLeft,
+    description: makeBold("User Left"),
+    content: member.user
       ? `ID: ${member.user.id}\nTag: ${member.user.tag}`
-      : "Could not retrieve user details"
-  );
+      : "Could not retrieve user details",
+  };
 };
 
-const onMessageCreated = (message: Message): void => {
-  if (!shouldLogMessage(message) || !message.content) {
-    return;
-  }
-
+const handleCreatedMessage = (
+  message: Message | PartialMessage
+): ChatLogInfo => {
   const author = getUserName(message.member, message.author);
   const channelName = getChannelName(message);
 
   Log.debug(
-    `New message from ${author} (${message.author.tag}) in ${channelName}: ${message.content}`
+    `New message from ${author} (${getUserTag(
+      message.author
+    )}) in ${channelName}: ${message.content}`
   );
 
-  sendChatlogMessage(
-    {
+  return {
+    author: {
       name: author,
-      iconURL: message.author.avatarURL() || undefined,
+      iconURL: message.author?.avatarURL() || undefined,
     },
-    config.discord.logColours.messageCreated,
-    `**New Message** ${channelName} - ${message.author.tag}${
-      message.channel.type !== "dm" ? ` (${message.url})` : ""
-    }`,
-    message.content
-  );
+    colour: config.discord.logColours.messageCreated,
+    description: compose(
+      addMessageUrl(message),
+      addAuthorTag(message),
+      addChannelName(channelName),
+      makeBold
+    )("New Message"),
+    content: message.content!,
+  };
 };
 
-const onMessageDeleted = (message: Message | PartialMessage): void => {
-  if (!shouldLogMessage(message)) {
-    return;
-  }
-
+const handleDeletedMessage = (
+  message: Message | PartialMessage
+): ChatLogInfo => {
   const author = getUserName(message.member, message.author);
   const channelName = getChannelName(message);
 
@@ -123,24 +141,24 @@ const onMessageDeleted = (message: Message | PartialMessage): void => {
     `Message from ${author} in ${channelName} deleted: ${message.content}`
   );
 
-  sendChatlogMessage(
-    {
+  return {
+    author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
-    config.discord.logColours.messageDeleted,
-    `**Message Deleted** ${channelName}${
-      message.author ? ` - ${message.author?.tag}` : ""
-    }`,
-    message.content || undefined
-  );
+    colour: config.discord.logColours.messageDeleted,
+    description: compose(
+      addAuthorTag(message),
+      addChannelName(channelName),
+      makeBold
+    )("Message Deleted"),
+    content: message.content || undefined,
+  };
 };
 
-const onMessageUpdated = (message: Message | PartialMessage): void => {
-  if (!shouldLogMessage(message)) {
-    return;
-  }
-
+const handleUpdatedMessage = (
+  message: Message | PartialMessage
+): ChatLogInfo => {
   const updatedMessage = message.channel.messages.cache.get(message.id);
 
   const author = getUserName(message.member, message.author);
@@ -152,43 +170,20 @@ const onMessageUpdated = (message: Message | PartialMessage): void => {
     }) in #${channelName} edited to: ${updatedMessage?.content}`
   );
 
-  sendChatlogMessage(
-    {
+  return {
+    author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
-    config.discord.logColours.messageUpdated,
-    `**Message Edited** ${channelName}${
-      message.author ? ` - ${message.author?.tag}` : ""
-    }${message.channel.type !== "dm" ? ` (${message.url})` : ""}`,
-    updatedMessage?.content || undefined
-  );
-};
-
-const sendChatlogMessage = (
-  messageAuthor: {
-    name: string;
-    iconURL?: string;
-  },
-  colour: ColorResolvable,
-  description: string,
-  content?: string
-): void => {
-  const channel = discordClient.channels.cache.get(
-    config.discord.logChannelId
-  ) as TextChannel;
-
-  channel.send(`${getTimeStamp()} ${description}`);
-
-  if (content) {
-    const messageEmbed = new MessageEmbed({
-      description: content,
-      author: messageAuthor,
-      color: colour,
-    });
-
-    channel.send(messageEmbed);
-  }
+    colour: config.discord.logColours.messageUpdated,
+    description: compose(
+      addMessageUrl(message),
+      addAuthorTag(message),
+      addChannelName(channelName),
+      makeBold
+    )("Message Edited"),
+    content: updatedMessage?.content || undefined,
+  };
 };
 
 const getUserName = (
@@ -200,11 +195,14 @@ const getUserName = (
   return user?.bot ? `${name} [BOT]` : name;
 };
 
-const getTimeStamp = () => `<t:${Math.floor(Date.now() / 1000)}>`;
+const getUserTag = (user: User | null): string => {
+  return user?.tag || "Could not retrieve tag";
+};
 
 const shouldLogMessage = (message: Message | PartialMessage): boolean =>
   message.channel.id !== config.discord.logChannelId &&
-  message.author?.id !== discordClient?.user?.id;
+  message.author?.id !== discordClient?.user?.id &&
+  !isEmpty(message.content);
 
 const getChannelName = (message: Message | PartialMessage): string => {
   if (message.channel.type === "dm") {
@@ -215,4 +213,5 @@ const getChannelName = (message: Message | PartialMessage): string => {
 
   return `#${channel?.name}` || "Unidentified channel";
 };
+
 export default initMonitor;
