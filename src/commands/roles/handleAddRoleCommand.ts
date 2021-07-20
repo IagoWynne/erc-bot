@@ -1,4 +1,10 @@
-
+import { Message } from "discord.js";
+import { Log } from "../../logging";
+import { sendDmToUser } from "../messages";
+import findGuildMember from "./findGuildMember";
+import findGuildRole from "./findGuildRole";
+import getRoleAlias from "./getRoleAlias";
+import getRoleId from "./getRoleId";
 
 const handleAddRoleCommand = async (message: Message) => {
   const guildMember = await findGuildMember(message.author.id);
