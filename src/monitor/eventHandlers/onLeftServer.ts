@@ -4,7 +4,7 @@ import config from "../../config";
 import { Log } from "../../logging";
 import ChatLogInfo from "../../types/monitor/chatLogInfo";
 import { makeBold } from "../chatLog/formatMessages";
-import getUserName from "../chatLog/getUserName";
+import getUserName from "../../messages/getUserName";
 import sendChatlogMessage from "../chatLog/sendChatLogMessage";
 
 const handleLeftServer = (

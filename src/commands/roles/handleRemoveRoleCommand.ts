@@ -1,7 +1,6 @@
-
 import { Message } from "discord.js";
 import { Log } from "../../logging";
-import { sendDmToUser } from "../messages";
+import { sendDmToUser } from "../../messages";
 import findGuildMember from "./findGuildMember";
 import findGuildRole from "./findGuildRole";
 import getRoleAlias from "./getRoleAlias";
@@ -26,7 +25,7 @@ const handleRemoveRoleCommand = async (message: Message) => {
     Log.warn(
       `Remove Role command from ${message.author.tag} failed: could not find role with id ${roleAlias}`
     );
-    
+
     sendDmToUser(
       guildMember.user,
       `Sorry, the role ${roleAlias} does not exist. Type \`.help\` to view the available commands.`

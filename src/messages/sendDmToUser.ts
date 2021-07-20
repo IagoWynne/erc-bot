@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { Log } from "../../logging";
+import { Log } from "../logging";
 
 const sendDmToUser = async (user: User, message: string) => {
   Log.debug(`Sending DM to user ${user.tag}: ${message}`);

@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { ifElse } from "ramda";
 import * as Discord from "../discord";
 import { Log } from "../logging";
-import { deleteTriggerMessage } from "./messages";
+import { deleteTriggerMessage } from "../messages";
 import shouldProcess from "./preProcessing/shouldProcess";
 import getCommand from "./preProcessing/getCommand";
 
