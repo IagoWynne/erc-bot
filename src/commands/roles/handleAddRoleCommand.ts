@@ -1,14 +1,6 @@
-import { Message, GuildMember, Role, User } from "discord.js";
-import { Log } from "../../logging";
-import getRoleAlias from "./getRoleAlias";
-import getRoleId from "./getRoleId";
 
-const handleAddRoleCommand = async (
-  findGuildMember: (id: string) => Promise<GuildMember>,
-  findGuildRole: (id: string) => Promise<Role | null>,
-  sendDm: (user: User, message: string) => void,
-  message: Message
-) => {
+
+const handleAddRoleCommand = async (message: Message) => {
   const guildMember = await findGuildMember(message.author.id);
 
   if (!guildMember) {
@@ -27,7 +19,7 @@ const handleAddRoleCommand = async (
     Log.warn(
       `Add Role command from ${message.author.tag} failed: could not find role with id ${roleAlias}`
     );
-    sendDm(
+    sendDmToUser(
       guildMember.user,
       `Sorry, the role ${roleAlias} does not exist. Type \`.help\` to view the available commands.`
     );
@@ -35,16 +27,16 @@ const handleAddRoleCommand = async (
   }
 
   if (guildMember.roles.cache.get(roleId)) {
-    sendDm(guildMember.user, `You already have the role ${role.name}.`);
+    sendDmToUser(guildMember.user, `You already have the role ${role.name}.`);
     return;
   }
 
   try {
     guildMember.roles.add(role);
-    sendDm(guildMember.user, `Added role ${role.name}`);
+    sendDmToUser(guildMember.user, `Added role ${role.name}`);
   } catch (e) {
     Log.error(e);
-    sendDm(
+    sendDmToUser(
       guildMember.user,
       `There was an error adding the role ${role.name}. Please contact an admin for assistance.`
     );
