@@ -1,4 +1,4 @@
-import { Client, Guild, GuildChannel } from "discord.js";
+import { Client, Guild, GuildChannel, User } from "discord.js";
 import config from "../config";
 import { Log } from "../logging";
 
@@ -12,6 +12,10 @@ const login = () => {
 };
 
 const fetchGuild = async () => {
+  if (guild) {
+    return;
+  }
+
   await client.guilds.fetch(config.discord.guildId);
 
   const clientGuild = client.guilds.cache.get(config.discord.guildId);
@@ -30,4 +34,14 @@ const fetchGuild = async () => {
 
 const getGuild = (): Guild => guild;
 
-export { getClient, login, getGuild, fetchGuild };
+const findUser = async (id: string): Promise<User> => {
+  const user = await client.users.fetch(id);
+
+  if (!user) {
+    Log.warn(`Could not find user with id ${id}`);
+  }
+
+  return user;
+};
+
+export { getClient, login, getGuild, fetchGuild, findUser };

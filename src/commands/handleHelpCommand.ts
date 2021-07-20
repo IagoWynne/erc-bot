@@ -1,13 +1,11 @@
-import { Message, User } from "discord.js";
+import { Message } from "discord.js";
 import config from "../config";
 import { Log } from "../logging";
+import * as Discord from "../discord";
+import { sendDmToUser } from "./messages";
 
-const handleHelpCommand = async (
-  getUser: (id: string) => Promise<User>,
-  sendDm: (user: User, message: string) => void,
-  message: Message
-) => {
-  const user = await getUser(message.author.id);
+const handleHelpCommand = async (message: Message) => {
+  const user = await Discord.findUser(message.author.id);
 
   if (!user) {
     Log.warn(
@@ -17,7 +15,7 @@ const handleHelpCommand = async (
     return;
   }
 
-  sendDm(message.author, config.commands.helpMessage);
+  sendDmToUser(message.author, config.commands.helpMessage);
 };
 
 export default handleHelpCommand;

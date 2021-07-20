@@ -4,9 +4,9 @@ import * as Discord from "../discord";
 import onJoinedServer from "./eventHandlers/onJoinedServer";
 import onLeftServer from "./eventHandlers/onLeftServer";
 import shouldLogMessage from "./chatLog/shouldLogMessage";
-import onCreatedMessage from "./eventHandlers/handleCreatedMessage";
-import onDeletedMessage from "./eventHandlers/handleDeletedMessage";
-import onUpdatedMessage from "./eventHandlers/handleUpdatedMessage";
+import onCreatedMessage from "./eventHandlers/onCreatedMessage";
+import onDeletedMessage from "./eventHandlers/onDeletedMessage";
+import onUpdatedMessage from "./eventHandlers/onUpdatedMessage";
 
 const initMonitor = async () => {
   Log.debug("Initialising monitor");

@@ -13,7 +13,7 @@ client.on("ready", () => {
   Log.debug(`Logged in as ${client.user?.username}`);
 
   initMonitor();
-  initCommands(client);
+  initCommands();
 
   Log.info("Bot started. Press Ctrl+C to terminate.");
 });
