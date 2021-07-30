@@ -2,14 +2,14 @@ import { GuildMember, PartialGuildMember } from "discord.js";
 import { compose } from "ramda";
 import config from "../../config";
 import { Log } from "../../logging";
-import ChatLogInfo from "../../types/monitor/chatLogInfo";
+import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 import { makeBold } from "../chatLog/formatMessages";
 import getUserName from "../../messages/getUserName";
-import sendChatlogMessage from "../chatLog/sendChatLogMessage";
+import { sendMessageToLogChannel } from "../../messages";
 
 const handleLeftServer = (
   member: GuildMember | PartialGuildMember
-): ChatLogInfo => {
+): LogChannelMessage => {
   const memberUsername = getUserName(member, member.user);
 
   Log.debug(
@@ -31,6 +31,6 @@ const handleLeftServer = (
   };
 };
 
-const onLeftServer = compose(sendChatlogMessage, handleLeftServer);
+const onLeftServer = compose(sendMessageToLogChannel, handleLeftServer);
 
 export default onLeftServer;

@@ -1,9 +1,9 @@
 import { MessageEmbed, TextChannel } from "discord.js";
-import * as Discord from "../../discord";
-import config from "../../config";
-import ChatLogInfo from "../../types/monitor/chatLogInfo";
+import * as Discord from "../discord";
+import config from "../config";
+import LogChannelMessage from "../types/monitor/LogChannelMessage";
 
-const sendChatlogMessage = (info: ChatLogInfo): void => {
+const sendMessageToLogChannel = (info: LogChannelMessage): void => {
   const channel = Discord.getClient().channels.cache.get(
     config.discord.logChannelId
   ) as TextChannel;
@@ -23,4 +23,4 @@ const sendChatlogMessage = (info: ChatLogInfo): void => {
 
 const getTimeStamp = () => `<t:${Math.floor(Date.now() / 1000)}>`;
 
-export default sendChatlogMessage;
+export default sendMessageToLogChannel;

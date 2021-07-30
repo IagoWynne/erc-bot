@@ -9,12 +9,12 @@ import onDeletedMessage from "./eventHandlers/onDeletedMessage";
 import onUpdatedMessage from "./eventHandlers/onUpdatedMessage";
 
 const initMonitor = async () => {
-  Log.debug("Initialising monitor");
+  Log.debug("Initiating monitor...");
   await Discord.fetchGuild();
 
   setupListeners();
 
-  Log.debug("Monitor intiated");
+  Log.debug("Monitor intiated!");
 };
 
 const setupListeners = () => {
@@ -26,8 +26,6 @@ const setupListeners = () => {
   client.on("guildMemberAdd", onJoinedServer);
   client.on("guildMemberRemove", onLeftServer);
 };
-
-//todo: refactor all this stuff into separate files for each event type
 
 const onMessageEvent =
   (messageEventHandler: (message: Message | PartialMessage) => void) =>
