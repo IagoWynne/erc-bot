@@ -1,8 +1,8 @@
 import { Message, PartialMessage } from "discord.js";
-import { compose } from "ramda";
+import { compose, ifElse } from "ramda";
 import config from "../../config";
 import { Log } from "../../logging";
-import ChatLogInfo from "../../types/monitor/chatLogInfo";
+import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 import {
   addAuthorTag,
   addChannelName,
@@ -11,11 +11,12 @@ import {
 import getChannelName from "../../messages/getChannelName";
 import getUserName from "../../messages/getUserName";
 import getUserTag from "../chatLog/getUserTag";
-import sendChatlogMessage from "../chatLog/sendChatLogMessage";
+import { sendMessageToLogChannel } from "../../messages";
+import { isChannelBeingPurged } from "../../purge";
 
 const handleDeletedMessage = (
   message: Message | PartialMessage
-): ChatLogInfo => {
+): LogChannelMessage => {
   const author = getUserName(message.member, message.author);
   const channelName = getChannelName(message);
   const authorTag = getUserTag(message.author);
@@ -41,6 +42,13 @@ const handleDeletedMessage = (
   };
 };
 
-const onDeletedMessage = compose(sendChatlogMessage, handleDeletedMessage);
+const shouldLogDeletion = (message: Message | PartialMessage): boolean =>
+  !isChannelBeingPurged(message.channel.id);
+
+const onDeletedMessage = ifElse(
+  shouldLogDeletion,
+  compose(sendMessageToLogChannel, handleDeletedMessage),
+  () => {}
+);
 
 export default onDeletedMessage;

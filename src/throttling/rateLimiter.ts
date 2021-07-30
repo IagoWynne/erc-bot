@@ -41,8 +41,6 @@ export class RateLimiter {
       ? this.interval - this.interval * userLimiter.getTokensRemaining()
       : 0;
 
-    console.log(remainingMilliseconds);
-
     return remainingMilliseconds;
   }
 

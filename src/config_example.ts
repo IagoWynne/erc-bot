@@ -11,6 +11,8 @@ const config: Config = {
       messageCreated: "blue",
       messageUpdated: 0x00ff00,
       messageDeleted: "#FF0000",
+      channelPurged: 0x000000,
+      commandUsed: 0x000000,
     },
     channels: [
       {

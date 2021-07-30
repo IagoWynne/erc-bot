@@ -2,6 +2,7 @@ import initCommands from "./commands";
 import * as Discord from "./discord";
 import { initLogging, Log } from "./logging";
 import initMonitor from "./monitor";
+import { initPurge } from "./purge";
 import initThrottling from "./throttling";
 
 initLogging();
@@ -15,6 +16,7 @@ client.on("ready", () => {
 
   initMonitor();
   initCommands();
+  initPurge();
   initThrottling();
 
   Log.info("Bot started. Press Ctrl+C to terminate.");

@@ -7,7 +7,7 @@ import shouldProcess from "./preProcessing/shouldProcess";
 import getCommand from "./preProcessing/getCommand";
 
 const initCommands = async () => {
-  Log.debug("Initialising command handlers...");
+  Log.debug("Initiating command handlers...");
   const client = Discord.getClient();
   await Discord.fetchGuild();
 
