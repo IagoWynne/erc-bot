@@ -12,6 +12,20 @@ const config: Config = {
       messageUpdated: 0x00ff00,
       messageDeleted: "#FF0000",
     },
+    channels: [
+      {
+        channelId: "12345",
+        throttling: {
+          tokenRefreshHours: 1,
+        },
+      },
+      {
+        channelId: "12345",
+        throttling: {
+          tokenRefreshHours: 2,
+        },
+      },
+    ],
   },
   logging: {
     enableConsoleLogs: true,

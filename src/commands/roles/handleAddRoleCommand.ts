@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { Log } from "../../logging";
-import { sendDmToUser } from "../messages";
+import { sendDmToUser } from "../../messages";
 import findGuildMember from "./findGuildMember";
 import findGuildRole from "./findGuildRole";
 import getRoleAlias from "./getRoleAlias";

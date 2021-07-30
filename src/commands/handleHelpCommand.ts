@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import config from "../config";
 import { Log } from "../logging";
 import * as Discord from "../discord";
-import { sendDmToUser } from "./messages";
+import { sendDmToUser } from "../messages";
 
 const handleHelpCommand = async (message: Message) => {
   const user = await Discord.findUser(message.author.id);

@@ -1,3 +1,4 @@
+import ChannelConfig from "./channelConfig";
 import LogMessageColours from "./logColours";
 
 export default interface DiscordConfig {
@@ -5,4 +6,5 @@ export default interface DiscordConfig {
   logChannelId: string;
   guildId: string;
   logColours: LogMessageColours;
+  channels: ChannelConfig[];
 }

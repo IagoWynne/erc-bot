@@ -9,8 +9,8 @@ import {
   addChannelName,
   makeBold,
 } from "../chatLog/formatMessages";
-import getChannelName from "../chatLog/getChannelName";
-import getUserName from "../chatLog/getUserName";
+import getChannelName from "../../messages/getChannelName";
+import getUserName from "../../messages/getUserName";
 import getUserTag from "../chatLog/getUserTag";
 import sendChatlogMessage from "../chatLog/sendChatLogMessage";
 
