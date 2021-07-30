@@ -16,15 +16,13 @@ const config: Config = {
       {
         channelId: "12345",
         throttling: {
-          maxTokens: 1,
-          tokenRefresh: 1,
+          tokenRefreshHours: 1,
         },
       },
       {
         channelId: "12345",
         throttling: {
-          maxTokens: 1,
-          tokenRefresh: 2,
+          tokenRefreshHours: 2,
         },
       },
     ],
