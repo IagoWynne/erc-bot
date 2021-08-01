@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import { split } from "ramda";
 import { Log } from "../../logging";
+import handleCheckCommand from "../handleCheckCommand";
 import handleHelpCommand from "../handleHelpCommand";
 import { handleAddRoleCommand, handleRemoveRoleCommand } from "../roles";
 
@@ -21,6 +22,10 @@ const matchCommand = (
     case "iamnot": {
       Log.debug(`Matched ${messageContent} to iamnot command`);
       return handleRemoveRoleCommand;
+    }
+    case "check": {
+      Log.debug(`Matched ${messageContent} to check command`);
+      return handleCheckCommand;
     }
   }
 
