@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { split } from "ramda";
 import { Log } from "../../logging";
-import handleCheckCommand from "../handleCheckCommand";
+import handleCheckCommand from "../check";
 import handleHelpCommand from "../handleHelpCommand";
 import { handleAddRoleCommand, handleRemoveRoleCommand } from "../roles";
 

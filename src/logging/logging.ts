@@ -1,5 +1,6 @@
 import { compose, forEach } from "ramda";
 import * as winston from "winston";
+import "winston-daily-rotate-file";
 import config from "../config";
 import LogFile from "../types/config/logging/logFile";
 
@@ -29,8 +30,10 @@ const initConsoleLogging = () =>
 
 const addLogFile = (fileConfig: LogFile) =>
   winston.add(
-    new winston.transports.File({
-      filename: `${fileConfig.path}${fileConfig.filename}`,
+    new winston.transports.DailyRotateFile({
+      filename: fileConfig.filename,
+      datePattern: fileConfig.datePattern,
+      dirname: fileConfig.path,
       level: fileConfig.logLevel,
       format: winston.format.combine(timestampFormatting, printFromatting),
     })
