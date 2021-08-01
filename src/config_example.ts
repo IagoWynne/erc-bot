@@ -8,9 +8,9 @@ const config: Config = {
     logColours: {
       userJoined: 0,
       userLeft: 0,
-      messageCreated: "blue",
-      messageUpdated: 0x00ff00,
-      messageDeleted: "#FF0000",
+      messageCreated: 0,
+      messageUpdated: 0x000000,
+      messageDeleted: "black",
       channelPurged: 0x000000,
       commandUsed: 0x000000,
     },
@@ -18,7 +18,9 @@ const config: Config = {
       {
         channelId: "12345",
         throttling: {
-          tokenRefreshHours: 1,
+          tokenRefreshHours: 24,
+          charLimit: 600,
+          newLineLimit: 1,
         },
       },
       {
@@ -81,7 +83,8 @@ const config: Config = {
         aliases: ["raidlead", "raidleader", "rl", "raidleaders", "raid lead"],
       },
     ],
-    helpMessage: "",
+    helpMessage:
+      "*Add a role*\n`.iam ROLE`\n\n*Remove a role:*\n`.iamnot ROLE`\n(ROLE being job acronym, DRK, SAM, BLM, etc.)\n\n*Add raid leader tag (to post on #clear_screenshots)*\n`.iam RL`\n\n*Add guest tag (to not receive pings anymore)*\n`.iam guest`\n\nPlease note that you still need to remove your previous roles manually.\nIf you've accidentally deleted your message in LFG/LFM channel, please note that the moderation team cannot help you bypass the posting limit. Please post on #party_finder until your limit is lifted.",
   },
 };
 
