@@ -36,14 +36,17 @@ const config: Config = {
     consoleLogLevel: "debug",
     files: [
       {
-        path: "./",
-        filename: "errors.log",
+        path: ".",
+        filename: "%DATE%-errors.log",
         logLevel: "error",
+        datePattern: "YYYY-MM-DD",
       },
       {
         path: "./",
-        filename: "info.log",
+        filename: "%DATE%-info.log",
         logLevel: "info",
+        datePattern: "YYYY-MM-DD",
+        maxFiles: 5,
       },
     ],
   },
