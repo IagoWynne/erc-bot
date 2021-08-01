@@ -54,17 +54,15 @@ const onRulesBroken = (
     `Hello, ${getUserName(
       null,
       message.author
-    )}, this is an automated message. Your latest message on ERC has been deleted because: 
-    ${
+    )}, this is an automated message. Your latest message on ERC has been deleted because: ${
       brokenRules.charLimit
-        ? `- it is too long. The limit is ${throttlingConfig.charLimit} while your message is ${brokenRules.totalChars} characters long.`
+        ? `\n- it is too long. The limit is ${throttlingConfig.charLimit} while your message is ${brokenRules.totalChars} characters long.`
         : ""
     }${
       brokenRules.newLineLimit
-        ? `- it has too many new lines. The limit is ${throttlingConfig.newLineLimit} while your message has ${brokenRules.newLines}.`
+        ? `\n- it has too many new lines. The limit is ${throttlingConfig.newLineLimit} while your message has ${brokenRules.newLines}.`
         : ""
-    }
-    To check the length of your ad, reply to this message with \`.check [your ad]\``
+    }\nTo check the length of your ad, reply to this message with \`.check [your ad]\``
   );
 };
 
