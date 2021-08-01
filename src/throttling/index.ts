@@ -8,7 +8,8 @@ import {
   isUserLimitedInChannel,
   onUserLimitedInChannel,
 } from "./rateLimiting";
-import { hasBrokenRules, onRulesBroken } from "./channelRules";
+import { onRulesBroken } from "./channelRules";
+import hasBrokenLfmRules from "../messages/hasBrokenRules";
 
 let throttledChannels: string[] = [];
 
@@ -36,7 +37,7 @@ const handleThrottledChannelMessage = (message: Message) => {
     config.discord.channels
   )!.throttling!;
 
-  const rulesBroken = hasBrokenRules(message, throttlingConfig);
+  const rulesBroken = hasBrokenLfmRules(message.content, throttlingConfig);
 
   if (rulesBroken.charLimit || rulesBroken.newLineLimit) {
     onRulesBroken(message, rulesBroken, throttlingConfig);

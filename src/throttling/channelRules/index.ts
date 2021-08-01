@@ -1,51 +1,12 @@
 import { Message } from "discord.js";
-import { replace, match } from "ramda";
 import { deleteTriggerMessage, sendDmToUser } from "../../messages";
 import getUserName from "../../messages/getUserName";
 import ThrottlingConfig from "../../types/config/discord/throttlingConfig";
-
-const hasTooManyCharacters = (charCount: number, charLimit?: number): boolean =>
-  charLimit ? charCount > charLimit : false;
-
-const hasTooManyNewLines = (
-  newLines: number,
-  newLinesLimit?: number
-): boolean => (newLinesLimit ? newLines > newLinesLimit : false);
-
-const getMessageCharacters = replace(/\<(.*?)\>/, "");
-
-const hasBrokenRules = (
-  message: Message,
-  throttlingConfig: ThrottlingConfig
-): {
-  charLimit: boolean;
-  totalChars: number;
-  newLineLimit: boolean;
-  newLines: number;
-} => {
-  const messageContent = getMessageCharacters(message.content);
-  console.log(messageContent);
-  const totalChars = messageContent.length;
-  const newLines = match(/\n/g, message.content).length;
-  console.log(newLines);
-  console.log(throttlingConfig.newLineLimit);
-
-  return {
-    charLimit: hasTooManyCharacters(totalChars, throttlingConfig.charLimit),
-    totalChars,
-    newLineLimit: hasTooManyNewLines(newLines, throttlingConfig.newLineLimit),
-    newLines,
-  };
-};
+import BrokenRulesInfo from "../../types/config/throttling/brokenRulesInfo";
 
 const onRulesBroken = (
   message: Message,
-  brokenRules: {
-    charLimit: boolean;
-    totalChars: number;
-    newLineLimit: boolean;
-    newLines: number;
-  },
+  brokenRules: BrokenRulesInfo,
   throttlingConfig: ThrottlingConfig
 ) => {
   deleteTriggerMessage(message);
@@ -66,4 +27,4 @@ const onRulesBroken = (
   );
 };
 
-export { hasBrokenRules, onRulesBroken };
+export { onRulesBroken };
