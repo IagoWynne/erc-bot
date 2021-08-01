@@ -7,4 +7,5 @@ export default interface DiscordConfig {
   guildId: string;
   logColours: LogMessageColours;
   channels: ChannelConfig[];
+  welcomeMessage: string;
 }
