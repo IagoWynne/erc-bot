@@ -33,7 +33,7 @@ const onUserLimitedInChannel = (message: Message) => {
     
     You will be able to post again in the LFG/LFM channel <t:${Math.floor(
       getRemainingTokenTime(message.channel.id, message.author.id) / 1000
-    )}:R>.
+    )}>.
     
     If you have deleted your message by accident, the admin team cannot help you lift the limit.
     
