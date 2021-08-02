@@ -7,7 +7,7 @@ import {
   addMessageUrl,
   addAuthorTag,
   addChannelName,
-  makeBold,
+  addMessageAttachments,
 } from "../chatLog/formatMessages";
 import getChannelName from "../../messages/getChannelName";
 import getUserName from "../../messages/getUserName";
@@ -40,7 +40,10 @@ const handleCreatedMessage = (
     content: message.content!,
   };
 
-  return addMessageUrl(message)(logChannelMessage);
+  return compose(
+    addMessageUrl(message),
+    addMessageAttachments(message)
+  )(logChannelMessage);
 };
 
 const onCreatedMessage = compose(sendMessageToLogChannel, handleCreatedMessage);

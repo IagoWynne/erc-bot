@@ -21,6 +21,10 @@ const sendMessageToLogChannel = (info: LogChannelMessage): void => {
     messageEmbed.addField("Content", info.content);
   }
 
+  if (info.attachmentUrls) {
+    messageEmbed.addField("Attachments", info.attachmentUrls.join("\n"));
+  }
+
   channel.send(messageEmbed);
 };
 

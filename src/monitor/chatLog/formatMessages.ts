@@ -20,4 +20,22 @@ const addMessageUrl =
       ? { ...logChannelMessage, url: message.url }
       : { ...logChannelMessage };
 
-export { makeBold, addChannelName, addAuthorTag, addMessageUrl };
+const addMessageAttachments =
+  (message: Message | PartialMessage) =>
+  (logMessage: LogChannelMessage): LogChannelMessage =>
+    message.attachments.size > 0
+      ? {
+          ...logMessage,
+          attachmentUrls: message.attachments.map(
+            (attachment) => attachment.url
+          ),
+        }
+      : { ...logMessage };
+
+export {
+  makeBold,
+  addChannelName,
+  addAuthorTag,
+  addMessageUrl,
+  addMessageAttachments,
+};
