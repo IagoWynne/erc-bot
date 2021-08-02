@@ -26,20 +26,21 @@ const handleCreatedMessage = (
     )}) in ${channelName}: ${message.content}`
   );
 
-  return {
+  const logChannelMessage = {
     author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
+    title: "New Message",
     colour: config.discord.logColours.messageCreated,
     description: compose(
-      addMessageUrl(message),
-      addAuthorTag(message),
       addChannelName(channelName),
-      makeBold
-    )("New Message"),
+      addAuthorTag(message)
+    )(""),
     content: message.content!,
   };
+
+  return addMessageUrl(message)(logChannelMessage);
 };
 
 const onCreatedMessage = compose(sendMessageToLogChannel, handleCreatedMessage);

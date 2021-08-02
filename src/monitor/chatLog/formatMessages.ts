@@ -1,20 +1,23 @@
 import { Message, PartialMessage } from "discord.js";
+import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 
 const makeBold = (content: string): string => `**${content}**`;
 
 const addChannelName =
   (channelName: string) =>
   (content: string): string =>
-    `${content} ${channelName}`;
+    `${content} - ${channelName}`;
 
 const addAuthorTag =
   (message: Message | PartialMessage) =>
   (content: string): string =>
-    message.author ? `${content} - ${message.author.tag}` : content;
+    message.author ? `${content} ${message.author.tag}` : content;
 
 const addMessageUrl =
   (message: Message | PartialMessage) =>
-  (content: string): string =>
-    message.channel.type !== "dm" ? `${content} (${message.url})` : content;
+  (logChannelMessage: LogChannelMessage): LogChannelMessage =>
+    message.channel.type !== "dm"
+      ? { ...logChannelMessage, url: message.url }
+      : { ...logChannelMessage };
 
 export { makeBold, addChannelName, addAuthorTag, addMessageUrl };

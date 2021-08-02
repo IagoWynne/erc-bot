@@ -1,4 +1,4 @@
-import { Client, Guild, GuildChannel, User } from "discord.js";
+import { Client, Guild, GuildChannel, TextChannel, User } from "discord.js";
 import config from "../config";
 import { Log } from "../logging";
 
@@ -29,6 +29,10 @@ const fetchGuild = async () => {
 
   guild.channels.cache.forEach((channel: GuildChannel) => {
     channel.fetch();
+
+    if (channel instanceof TextChannel) {
+      channel.messages.fetch();
+    }
   });
 };
 

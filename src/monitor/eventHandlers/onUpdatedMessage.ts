@@ -29,20 +29,21 @@ const handleUpdatedMessage = (
     }) in ${channelName} edited to: ${updatedMessage?.content}`
   );
 
-  return {
+  const logChannelMessage = {
     author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
+    title: "Message Edited",
     colour: config.discord.logColours.messageUpdated,
     description: compose(
-      addMessageUrl(message),
-      addAuthorTag(message),
       addChannelName(channelName),
-      makeBold
-    )("Message Edited"),
+      addAuthorTag(message)
+    )(""),
     content: updatedMessage?.content || undefined,
   };
+
+  return addMessageUrl(message)(logChannelMessage);
 };
 
 const onUpdatedMessage = compose(sendMessageToLogChannel, handleUpdatedMessage);

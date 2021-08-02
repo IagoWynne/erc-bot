@@ -32,12 +32,12 @@ const handleDeletedMessage = (
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
+    title: "Message Deleted",
     colour: config.discord.logColours.messageDeleted,
     description: compose(
-      addAuthorTag(message),
       addChannelName(channelName),
-      makeBold
-    )("Message Deleted"),
+      addAuthorTag(message)
+    )(""),
     content: message.content || undefined,
   };
 };
