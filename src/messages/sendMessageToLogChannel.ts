@@ -8,17 +8,24 @@ const sendMessageToLogChannel = (info: LogChannelMessage): void => {
     config.discord.logChannelId
   ) as TextChannel;
 
-  channel.send(`${getTimeStamp()} ${info.description}`);
+  const messageEmbed = new MessageEmbed({
+    title: info.title,
+    description: info.description,
+    author: info.author,
+    color: info.colour,
+    url: info.url,
+    timestamp: Date.now(),
+  });
 
   if (info.content) {
-    const messageEmbed = new MessageEmbed({
-      description: info.content,
-      author: info.author,
-      color: info.colour,
-    });
-
-    channel.send(messageEmbed);
+    messageEmbed.addField("Content", info.content);
   }
+
+  if (info.attachmentUrls) {
+    messageEmbed.addField("Attachments", info.attachmentUrls.join("\n"));
+  }
+
+  channel.send(messageEmbed);
 };
 
 const getTimeStamp = () => `<t:${Math.floor(Date.now() / 1000)}>`;

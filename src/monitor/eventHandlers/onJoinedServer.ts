@@ -17,6 +17,7 @@ const handleJoinedServer = (member: GuildMember): LogChannelMessage => {
       name: memberUsername,
       iconURL: member.user.avatarURL() || undefined,
     },
+    title: "User Joined",
     colour: config.discord.logColours.userJoined,
     description: makeBold("User Joined"),
     content: `ID: ${member.user.id}\nTag: ${member.user.tag}`,

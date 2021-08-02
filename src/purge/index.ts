@@ -45,9 +45,9 @@ const purgeChannel = async (channelId: string) => {
 
   sendMessageToLogChannel({
     author: { name: "" },
-    description: `**Channel Purged** ${channel.name}`,
+    title: `Channel Purged - ${channel.name}`,
+    description: `${messagesDeleted} messages deleted`,
     colour: config.discord.logColours.channelPurged,
-    content: `${messagesDeleted} messages deleted`,
   });
 };
 

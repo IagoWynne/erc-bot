@@ -7,7 +7,7 @@ import {
   addMessageUrl,
   addAuthorTag,
   addChannelName,
-  makeBold,
+  addMessageAttachments,
 } from "../chatLog/formatMessages";
 import getChannelName from "../../messages/getChannelName";
 import getUserName from "../../messages/getUserName";
@@ -29,20 +29,24 @@ const handleUpdatedMessage = (
     }) in ${channelName} edited to: ${updatedMessage?.content}`
   );
 
-  return {
+  const logChannelMessage = {
     author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
+    title: "Message Edited",
     colour: config.discord.logColours.messageUpdated,
     description: compose(
-      addMessageUrl(message),
-      addAuthorTag(message),
       addChannelName(channelName),
-      makeBold
-    )("Message Edited"),
+      addAuthorTag(message)
+    )(""),
     content: updatedMessage?.content || undefined,
   };
+
+  return compose(
+    addMessageUrl(message),
+    addMessageAttachments(message)
+  )(logChannelMessage);
 };
 
 const onUpdatedMessage = compose(sendMessageToLogChannel, handleUpdatedMessage);

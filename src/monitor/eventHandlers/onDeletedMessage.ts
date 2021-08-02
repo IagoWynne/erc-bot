@@ -6,7 +6,7 @@ import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 import {
   addAuthorTag,
   addChannelName,
-  makeBold,
+  addMessageAttachments,
 } from "../chatLog/formatMessages";
 import getChannelName from "../../messages/getChannelName";
 import getUserName from "../../messages/getUserName";
@@ -27,19 +27,21 @@ const handleDeletedMessage = (
     }) in ${channelName} deleted: ${message.content}`
   );
 
-  return {
+  const logChannelMessage = {
     author: {
       name: author,
       iconURL: message.author?.avatarURL() || undefined,
     },
+    title: "Message Deleted",
     colour: config.discord.logColours.messageDeleted,
     description: compose(
-      addAuthorTag(message),
       addChannelName(channelName),
-      makeBold
-    )("Message Deleted"),
+      addAuthorTag(message)
+    )(""),
     content: message.content || undefined,
   };
+
+  return addMessageAttachments(message)(logChannelMessage);
 };
 
 const shouldLogDeletion = (message: Message | PartialMessage): boolean =>

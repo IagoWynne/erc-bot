@@ -23,6 +23,7 @@ const handleLeftServer = (
       name: memberUsername,
       iconURL: member.user?.avatarURL() || undefined,
     },
+    title: "User Left",
     colour: config.discord.logColours.userLeft,
     description: makeBold("User Left"),
     content: member.user
