@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import config from "../../config";
 import { deleteTriggerMessage, sendDmToUser } from "../../messages";
 import getUserName from "../../messages/getUserName";
@@ -31,7 +31,11 @@ const onRulesBroken = (
       },
       colour: config.discord.logColours.botUpdate,
       title: "Removed LFG/LFM Message",
-      description: `Removed message in ${message.channel} as it broke the rules on message length and/or new lines.\n${message.author.tag} - ${message.author.id}`,
+      description: `Removed message in ${
+        (message.channel as TextChannel).name
+      } as it broke the rules on message length and/or new lines.\n${
+        message.author.tag
+      } - ${message.author.id}`,
     }
   );
 };

@@ -63,7 +63,7 @@ const handleRemoveRoleCommand = async (message: Message) => {
       },
       colour: config.discord.logColours.commandUsed,
       title: "Command Executed",
-      description: `\`.iamnot\` command executed successfully.\nRemoved role ${role.name} to user.\n${message.author.tag} - ${message.author.id}`,
+      description: `\`.iamnot\` command executed successfully.\nRemoved role ${role.name} from user.\n${message.author.tag} - ${message.author.id}`,
     });
   } catch (e) {
     Log.error(e);
