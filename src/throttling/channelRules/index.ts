@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import config from "../../config";
 import { deleteTriggerMessage, sendDmToUser } from "../../messages";
 import getUserName from "../../messages/getUserName";
 import ThrottlingConfig from "../../types/config/discord/throttlingConfig";
@@ -23,7 +24,15 @@ const onRulesBroken = (
       brokenRules.newLineLimit
         ? `\n- it has too many new lines. The limit is ${throttlingConfig.newLineLimit} while your message has ${brokenRules.newLines}.`
         : ""
-    }\nTo check the length of your ad, reply to this message with \`.check [your ad]\``
+    }\nTo check the length of your ad, reply to this message with \`.check [your ad]\``,
+    {
+      author: {
+        name: "ERC Bot",
+      },
+      colour: config.discord.logColours.botUpdate,
+      title: "Removed LFG/LFM Message",
+      description: `Removed message in ${message.channel} as it broke the rules on message length and/or new lines.\n${message.author.tag} - ${message.author.id}`,
+    }
   );
 };
 
