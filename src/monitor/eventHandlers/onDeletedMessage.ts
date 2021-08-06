@@ -4,7 +4,7 @@ import config from "../../config";
 import { Log } from "../../logging";
 import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 import {
-  addAuthorTag,
+  addAuthorTagAndId,
   addChannelName,
   addMessageAttachments,
 } from "../chatLog/formatMessages";
@@ -36,7 +36,7 @@ const handleDeletedMessage = (
     colour: config.discord.logColours.messageDeleted,
     description: compose(
       addChannelName(channelName),
-      addAuthorTag(message)
+      addAuthorTagAndId(message)
     )(""),
     content: message.content || undefined,
   };
