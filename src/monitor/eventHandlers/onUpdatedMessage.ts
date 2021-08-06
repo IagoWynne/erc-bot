@@ -5,7 +5,7 @@ import { Log } from "../../logging";
 import LogChannelMessage from "../../types/monitor/LogChannelMessage";
 import {
   addMessageUrl,
-  addAuthorTag,
+  addAuthorTagAndId,
   addChannelName,
   addMessageAttachments,
 } from "../chatLog/formatMessages";
@@ -38,7 +38,7 @@ const handleUpdatedMessage = (
     colour: config.discord.logColours.messageUpdated,
     description: compose(
       addChannelName(channelName),
-      addAuthorTag(message)
+      addAuthorTagAndId(message)
     )(""),
     content: updatedMessage?.content || undefined,
   };

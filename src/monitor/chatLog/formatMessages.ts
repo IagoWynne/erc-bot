@@ -6,12 +6,14 @@ const makeBold = (content: string): string => `**${content}**`;
 const addChannelName =
   (channelName: string) =>
   (content: string): string =>
-    `${content} - ${channelName}`;
+    `${content}\n${channelName}`;
 
-const addAuthorTag =
+const addAuthorTagAndId =
   (message: Message | PartialMessage) =>
   (content: string): string =>
-    message.author ? `${content} ${message.author.tag}` : content;
+    message.author
+      ? `${content} ${message.author.tag} - ${message.author.id}`
+      : content;
 
 const addMessageUrl =
   (message: Message | PartialMessage) =>
@@ -35,7 +37,7 @@ const addMessageAttachments =
 export {
   makeBold,
   addChannelName,
-  addAuthorTag,
+  addAuthorTagAndId,
   addMessageUrl,
   addMessageAttachments,
 };
