@@ -8,4 +8,6 @@ export default interface LogMessageColours {
   messageDeleted: ColorResolvable;
   channelPurged: ColorResolvable;
   commandUsed: ColorResolvable;
+  commandError: ColorResolvable;
+  botUpdate: ColorResolvable;
 }

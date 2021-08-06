@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import config from "../../config";
 import { deleteTriggerMessage, sendDmToUser } from "../../messages";
 import getUserName from "../../messages/getUserName";
 import ChannelConfig from "../../types/config/discord/channelConfig";
@@ -37,7 +38,15 @@ const onUserLimitedInChannel = (message: Message) => {
     
     If you have deleted your message by accident, the admin team cannot help you lift the limit.
     
-    If your previous post was removed by a moderator for breaking the rules then you will have to wait for the 24 hours to pass. Please do not repost on another account to get around this. For more information, please read #announcements and the pins in the relevant channels.`
+    If your previous post was removed by a moderator for breaking the rules then you will have to wait for the 24 hours to pass. Please do not repost on another account to get around this. For more information, please read #announcements and the pins in the relevant channels.`,
+    {
+      author: {
+        name: "ERC Bot",
+      },
+      colour: config.discord.logColours.botUpdate,
+      title: "Throttled LFG/LFM Message",
+      description: `Deleted throttled message in ${message.channel}.\n${message.author.tag} - ${message.author.id}`,
+    }
   );
 };
 

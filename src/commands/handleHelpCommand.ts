@@ -15,7 +15,14 @@ const handleHelpCommand = async (message: Message) => {
     return;
   }
 
-  sendDmToUser(message.author, config.commands.helpMessage);
+  sendDmToUser(message.author, config.commands.helpMessage, {
+    author: {
+      name: "ERC Bot",
+    },
+    colour: config.discord.logColours.commandUsed,
+    title: "Command Executed",
+    description: `\`.help\` command executed successfully.\n${message.author.tag} - ${message.author.id}`,
+  });
 };
 
 export default handleHelpCommand;

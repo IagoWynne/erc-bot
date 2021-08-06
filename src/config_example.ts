@@ -13,6 +13,8 @@ const config: Config = {
       messageDeleted: "black",
       channelPurged: 0x000000,
       commandUsed: 0x000000,
+      botUpdate: 0x000000,
+      commandError: 0xff0000,
     },
     channels: [
       {

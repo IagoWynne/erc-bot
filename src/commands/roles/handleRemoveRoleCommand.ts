@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import config from "../../config";
 import { Log } from "../../logging";
 import { sendDmToUser } from "../../messages";
 import getCommandContent from "../getCommandContent";
@@ -29,24 +30,54 @@ const handleRemoveRoleCommand = async (message: Message) => {
 
     sendDmToUser(
       guildMember.user,
-      `Sorry, the role ${roleAlias} does not exist. Type \`.help\` to view the available commands.`
+      `Sorry, the role ${roleAlias} does not exist. Type \`.help\` to view the available commands.`,
+      {
+        author: {
+          name: "ERC Bot",
+        },
+        colour: config.discord.logColours.commandError,
+        title: "Command Execution Failed",
+        description: `\`.iamnot\` command failed.\nUser requested role which does not exist.\n${message.author.tag} (${message.author.id})`,
+      }
     );
     return;
   }
 
   if (!guildMember.roles.cache.get(roleId)) {
-    sendDmToUser(guildMember.user, `You do not have the role ${role.name}.`);
+    sendDmToUser(guildMember.user, `You do not have the role ${role.name}.`, {
+      author: {
+        name: "ERC Bot",
+      },
+      colour: config.discord.logColours.commandError,
+      title: "Command Execution Failed",
+      description: `\`.iamnot\` command failed.\nUser requested role which they do not have.\n${message.author.tag} - ${message.author.id}`,
+    });
     return;
   }
 
   try {
     guildMember.roles.remove(role);
-    sendDmToUser(guildMember.user, `Removed role ${role.name}`);
+    sendDmToUser(guildMember.user, `Removed role ${role.name}`, {
+      author: {
+        name: "ERC Bot",
+      },
+      colour: config.discord.logColours.commandUsed,
+      title: "Command Executed",
+      description: `\`.iamnot\` command executed successfully.\nRemoved role ${role.name} to user.\n${message.author.tag} - ${message.author.id}`,
+    });
   } catch (e) {
     Log.error(e);
     sendDmToUser(
       guildMember.user,
-      `There was an error removing the role ${role.name}. Please contact an admin for assistance.`
+      `There was an error removing the role ${role.name}. Please contact an admin for assistance.`,
+      {
+        author: {
+          name: "ERC Bot",
+        },
+        colour: config.discord.logColours.commandError,
+        title: "Command Execution Failed",
+        description: `\`.iamnot\` command failed.\nPlease review error logs.\n${message.author.tag} - ${message.author.id}`,
+      }
     );
   }
 };

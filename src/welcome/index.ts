@@ -20,7 +20,15 @@ const sendWelcomeMessage = async (member: GuildMember) => {
   await guild.members.fetch(member);
   await sendDmToUser(
     member.user,
-    formatWelcomeMessage(getUserName(member, member.user))
+    formatWelcomeMessage(getUserName(member, member.user)),
+    {
+      author: {
+        name: "ERC Bot",
+      },
+      colour: config.discord.logColours.botUpdate,
+      title: "Welcome Message Sent",
+      description: `${member.user.tag} - ${member.user.id}`,
+    }
   );
 };
 
