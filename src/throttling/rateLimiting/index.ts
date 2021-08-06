@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import config from "../../config";
 import { deleteTriggerMessage, sendDmToUser } from "../../messages";
 import getUserName from "../../messages/getUserName";
@@ -45,7 +45,9 @@ const onUserLimitedInChannel = (message: Message) => {
       },
       colour: config.discord.logColours.botUpdate,
       title: "Throttled LFG/LFM Message",
-      description: `Deleted throttled message in ${message.channel}.\n${message.author.tag} - ${message.author.id}`,
+      description: `Deleted throttled message in ${
+        (message.channel as TextChannel).name
+      }.\n${message.author.tag} - ${message.author.id}`,
     }
   );
 };
