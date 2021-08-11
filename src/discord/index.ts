@@ -6,6 +6,7 @@ import { Log } from "../logging";
 const client = new Client();
 let guild: Guild;
 const purgedMessageIds: { [key: string]: string[] } = {};
+const botDeletedMessageIds: string[] = [];
 
 const getClient = (): Client => client;
 
@@ -65,6 +66,21 @@ const clearChannelPurgedMessages = (channelId: string) => {
 const isMessagePurged = (channelId: string, messageId: string): boolean =>
   includes(messageId, getChannelPurgedMessageIds(channelId));
 
+const addDeletedMessageId = (messageId: string): void => {
+  botDeletedMessageIds.push(messageId);
+};
+
+const isBotDeletedMessage = (messageId: string): boolean =>
+  includes(messageId, botDeletedMessageIds);
+
+const removeDeletedMessageId = (messageId: string): void => {
+  const idx = botDeletedMessageIds.indexOf(messageId);
+
+  if (idx > -1) {
+    botDeletedMessageIds.splice(idx, 1);
+  }
+};
+
 export {
   getClient,
   login,
@@ -74,4 +90,7 @@ export {
   addPurgedMessageIds,
   clearChannelPurgedMessages,
   isMessagePurged,
+  addDeletedMessageId,
+  isBotDeletedMessage,
+  removeDeletedMessageId,
 };
