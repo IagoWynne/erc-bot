@@ -12,7 +12,7 @@ import getChannelName from "../../messages/getChannelName";
 import getUserName from "../../messages/getUserName";
 import getUserTag from "../chatLog/getUserTag";
 import { sendMessageToLogChannel } from "../../messages";
-import { isChannelBeingPurged } from "../../purge";
+import { isMessagePurged } from "../../discord";
 
 const handleDeletedMessage = (
   message: Message | PartialMessage
@@ -45,7 +45,7 @@ const handleDeletedMessage = (
 };
 
 const shouldLogDeletion = (message: Message | PartialMessage): boolean =>
-  !isChannelBeingPurged(message.channel.id);
+  !isMessagePurged(message.channel.id, message.id);
 
 const onDeletedMessage = ifElse(
   shouldLogDeletion,
