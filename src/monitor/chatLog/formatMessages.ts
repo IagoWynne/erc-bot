@@ -34,10 +34,16 @@ const addMessageAttachments =
         }
       : { ...logMessage };
 
+const addDeletedBy =
+  (deletedByName: string) =>
+  (content: string): string =>
+    deletedByName ? `${content}\nDeleted by: ${deletedByName}` : content;
+
 export {
   makeBold,
   addChannelName,
   addAuthorTagAndId,
   addMessageUrl,
   addMessageAttachments,
+  addDeletedBy,
 };
