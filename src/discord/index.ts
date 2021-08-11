@@ -1,9 +1,11 @@
 import { Client, Guild, GuildChannel, TextChannel, User } from "discord.js";
+import { compose, includes, pathOr } from "ramda";
 import config from "../config";
 import { Log } from "../logging";
 
 const client = new Client();
 let guild: Guild;
+const purgedMessageIds: { [key: string]: string[] } = {};
 
 const getClient = (): Client => client;
 
@@ -48,4 +50,28 @@ const findUser = async (id: string): Promise<User> => {
   return user;
 };
 
-export { getClient, login, getGuild, fetchGuild, findUser };
+const getChannelPurgedMessageIds = (channelId: string) =>
+  pathOr([], [channelId], purgedMessageIds);
+
+const addPurgedMessageIds = (channelId: string, messageIds: string[]) => {
+  const existingChannelMessageIds = getChannelPurgedMessageIds(channelId);
+  purgedMessageIds[channelId] = [...existingChannelMessageIds, ...messageIds];
+};
+
+const clearChannelPurgedMessages = (channelId: string) => {
+  purgedMessageIds[channelId] = [];
+};
+
+const isMessagePurged = (channelId: string, messageId: string): boolean =>
+  includes(messageId, getChannelPurgedMessageIds(channelId));
+
+export {
+  getClient,
+  login,
+  getGuild,
+  fetchGuild,
+  findUser,
+  addPurgedMessageIds,
+  clearChannelPurgedMessages,
+  isMessagePurged,
+};
