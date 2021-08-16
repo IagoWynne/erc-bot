@@ -4,6 +4,7 @@ const config: Config = {
   discord: {
     token: "SECRET TOKEN",
     logChannelId: "12345",
+    roleChannelId: "12345",
     guildId: "12345",
     logColours: {
       userJoined: 0,

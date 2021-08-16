@@ -8,4 +8,5 @@ export default interface DiscordConfig {
   logColours: LogMessageColours;
   channels: ChannelConfig[];
   welcomeMessage: string;
+  roleChannelId: string;
 }
