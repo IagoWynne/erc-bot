@@ -1,3 +1,4 @@
+import initButtons from "./buttons";
 import initCommands from "./commands";
 import * as Discord from "./discord";
 import { initLogging, Log } from "./logging";
@@ -20,6 +21,7 @@ client.on("ready", async () => {
   initPurge();
   initThrottling();
   await initWelcomeMessage();
+  initButtons();
 
   Log.info("Bot started. Press Ctrl+C to terminate.");
 });
