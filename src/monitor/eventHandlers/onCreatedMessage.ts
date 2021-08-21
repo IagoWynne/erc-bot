@@ -17,6 +17,7 @@ import { sendMessageToLogChannel } from "../../messages";
 const handleCreatedMessage = (
   message: Message | PartialMessage
 ): LogChannelMessage => {
+  Log.debug("Detected new message");
   const author = getUserName(message.member, message.author);
   const channelName = getChannelName(message);
 

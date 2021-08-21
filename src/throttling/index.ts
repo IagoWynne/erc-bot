@@ -23,7 +23,7 @@ const initThrottling = () => {
 
   const client = Discord.getClient();
   client.on(
-    "message",
+    "messageCreate",
     ifElse(isInThrottledChannel, handleThrottledChannelMessage, () => {})
   );
 };

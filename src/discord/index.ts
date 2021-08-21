@@ -1,9 +1,24 @@
-import { Client, Guild, GuildChannel, TextChannel, User } from "discord.js";
-import { compose, includes, pathOr } from "ramda";
+import {
+  Client,
+  Guild,
+  GuildChannel,
+  Intents,
+  TextChannel,
+  ThreadChannel,
+  User,
+} from "discord.js";
+import { exit } from "process";
+import { includes, pathOr } from "ramda";
 import config from "../config";
 import { Log } from "../logging";
 
-const client = new Client();
+const intents = new Intents(Intents.FLAGS.GUILDS);
+intents.add(Intents.FLAGS.GUILD_MEMBERS);
+intents.add(Intents.FLAGS.DIRECT_MESSAGES);
+intents.add(Intents.FLAGS.GUILD_MESSAGES);
+
+const client = new Client({ intents });
+
 let guild: Guild;
 const purgedMessageIds: { [key: string]: string[] } = {};
 const botDeletedMessageIds: string[] = [];
@@ -15,6 +30,7 @@ const login = () => {
 };
 
 const fetchGuild = async () => {
+  Log.debug("Fetching guild...");
   if (guild) {
     return;
   }
@@ -24,19 +40,24 @@ const fetchGuild = async () => {
   const clientGuild = client.guilds.cache.get(config.discord.guildId);
   if (!clientGuild) {
     Log.error(new Error("Could not get guild from ID"));
+    exit;
   } else {
     guild = clientGuild;
-  }
 
-  await guild.members.fetch();
-
-  guild.channels.cache.forEach((channel: GuildChannel) => {
-    channel.fetch();
-
-    if (channel instanceof TextChannel) {
-      channel.messages.fetch();
+    try {
+      await guild.members.fetch();
+    } catch (e) {
+      Log.error(e);
     }
-  });
+
+    guild.channels.cache.forEach((channel: GuildChannel | ThreadChannel) => {
+      channel.fetch();
+
+      if (channel instanceof TextChannel) {
+        channel.messages.fetch();
+      }
+    });
+  }
 };
 
 const getGuild = (): Guild => guild;

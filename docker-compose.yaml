@@ -4,3 +4,4 @@ services:
     build:
       context: .
       dockerfile: .dockerfile
+    restart: on-failure

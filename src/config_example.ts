@@ -10,7 +10,7 @@ const config: Config = {
       userLeft: 0,
       messageCreated: 0,
       messageUpdated: 0x000000,
-      messageDeleted: "black",
+      messageDeleted: 0x000000,
       channelPurged: 0x000000,
       commandUsed: 0x000000,
       botUpdate: 0x000000,
