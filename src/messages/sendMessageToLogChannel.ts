@@ -25,7 +25,7 @@ const sendMessageToLogChannel = (info: LogChannelMessage): void => {
     messageEmbed.addField("Attachments", info.attachmentUrls.join("\n"));
   }
 
-  channel.send(messageEmbed);
+  channel.send({ embeds: [messageEmbed] });
 };
 
 const getTimeStamp = () => `<t:${Math.floor(Date.now() / 1000)}>`;

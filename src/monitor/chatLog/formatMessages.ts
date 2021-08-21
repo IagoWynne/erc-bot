@@ -18,7 +18,7 @@ const addAuthorTagAndId =
 const addMessageUrl =
   (message: Message | PartialMessage) =>
   (logChannelMessage: LogChannelMessage): LogChannelMessage =>
-    message.channel.type !== "dm"
+    message.channel.type !== "DM"
       ? { ...logChannelMessage, url: message.url }
       : { ...logChannelMessage };
 

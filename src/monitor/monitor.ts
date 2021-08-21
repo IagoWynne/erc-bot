@@ -1,4 +1,4 @@
-import { Message, PartialMessage } from "discord.js";
+import { Awaited, Message, PartialMessage } from "discord.js";
 import { Log } from "../logging";
 import * as Discord from "../discord";
 import onJoinedServer from "./eventHandlers/onJoinedServer";
@@ -20,7 +20,7 @@ const initMonitor = async () => {
 const setupListeners = () => {
   const client = Discord.getClient();
 
-  client.on("message", onMessageEvent(onCreatedMessage));
+  client.on("messageCreate", onMessageEvent(onCreatedMessage));
   client.on("messageDelete", onMessageEvent(onDeletedMessage));
   client.on("messageUpdate", onMessageEvent(onUpdatedMessage));
   client.on("guildMemberAdd", onJoinedServer);
@@ -28,8 +28,11 @@ const setupListeners = () => {
 };
 
 const onMessageEvent =
-  (messageEventHandler: (message: Message | PartialMessage) => void) =>
-  (message: Message | PartialMessage) =>
-    shouldLogMessage(message) ? messageEventHandler(message) : null;
+  (messageEventHandler: (message: Message | PartialMessage) => Awaited<void>) =>
+  (message: Message | PartialMessage): Awaited<void> => {
+    if (shouldLogMessage(message)) {
+      messageEventHandler(message);
+    }
+  };
 
 export default initMonitor;

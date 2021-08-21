@@ -12,7 +12,7 @@ const initCommands = async () => {
   await Discord.fetchGuild();
 
   client.on(
-    "message",
+    "messageCreate",
     ifElse(shouldProcess, handleMessage, () => {})
   );
 

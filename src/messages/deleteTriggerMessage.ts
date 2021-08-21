@@ -4,7 +4,7 @@ import * as Discord from "../discord";
 
 const deleteTriggerMessage = async (message: Message) => {
   try {
-    if (message.channel.type !== "dm") {
+    if (message.channel.type !== "DM") {
       Discord.addDeletedMessageId(message.id);
       await message.delete();
     }
