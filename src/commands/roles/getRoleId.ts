@@ -1,10 +1,10 @@
 import { find, includes } from "ramda";
 import config from "../../config";
-import RoleMatchConfig from "../../types/config/commands/roleMatchConfig";
+import RoleCommandConfig from "../../types/config/commands/roleMatchConfig";
 
 const getRoleId = (roleAlias: string) =>
   find(
-    (roleMatchConfig: RoleMatchConfig) =>
+    (roleMatchConfig: RoleCommandConfig) =>
       includes(roleAlias, roleMatchConfig.aliases),
     config.commands.roles
   )?.roleId;
