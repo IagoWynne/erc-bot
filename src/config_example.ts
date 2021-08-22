@@ -89,6 +89,82 @@ const config: Config = {
     helpMessage:
       "*Add a role*\n`.iam ROLE`\n\n*Remove a role:*\n`.iamnot ROLE`\n(ROLE being job acronym, DRK, SAM, BLM, etc.)\n\n*Add raid leader tag (to post on #clear_screenshots)*\n`.iam RL`\n\n*Add guest tag (to not receive pings anymore)*\n`.iam guest`\n\nPlease note that you still need to remove your previous roles manually.\nIf you've accidentally deleted your message in LFG/LFM channel, please note that the moderation team cannot help you bypass the posting limit. Please post on #party_finder until your limit is lifted.",
   },
+  buttons: {
+    buttonRows: [
+      {
+        message: {
+          title: "Datacenter Choice",
+          content: "Example text that can be removed or replaced",
+        },
+        buttons: [
+          {
+            id: "chaos_data_center",
+            label: "Chaos",
+            roleId: "12345",
+            emoji: "black_heart",
+          },
+          {
+            id: "light_data_center",
+            label: "Light",
+            roleId: "12345",
+            emoji: "white_heart",
+          },
+        ],
+      },
+      {
+        message: {
+          title: "Role Choice",
+          content: "Example text that can be removed or replaced",
+        },
+        buttons: [
+          {
+            id: "tank_role",
+            label: "Tank",
+            roleId: "12345",
+            emoji: "blue_heart",
+          },
+          {
+            id: "healer_role",
+            label: "Healer",
+            roleId: "12345",
+            emoji: "green_heart",
+          },
+          {
+            id: "melee_role",
+            label: "Melee",
+            roleId: "12345",
+            emoji: "heart",
+          },
+          {
+            id: "ranged_role",
+            label: "Ranged",
+            roleId: "12345",
+            emoji: "yellow_heart",
+          },
+          {
+            id: "caster_role",
+            label: "Caster",
+            roleId: "12345",
+            emoji: "purple_heart",
+          },
+        ],
+      },
+      {
+        message: {
+          title: "Raid Leader Selection",
+          content: "Example text that can be removed or replaced",
+        },
+        buttons: [
+          {
+            id: "raid_leader_role",
+            label: "Raid Leader",
+            roleId: "",
+            emoji: "crown",
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export default config;

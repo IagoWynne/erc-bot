@@ -21,7 +21,7 @@ client.on("ready", async () => {
   initPurge();
   initThrottling();
   await initWelcomeMessage();
-  initButtons();
+  await initButtons();
 
   Log.info("Bot started. Press Ctrl+C to terminate.");
 });

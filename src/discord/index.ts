@@ -2,7 +2,9 @@ import {
   Client,
   Guild,
   GuildChannel,
+  GuildMember,
   Intents,
+  Role,
   TextChannel,
   ThreadChannel,
   User,
@@ -46,6 +48,7 @@ const fetchGuild = async () => {
 
     try {
       await guild.members.fetch();
+      await guild.emojis.fetch();
     } catch (e) {
       Log.error(e);
     }
@@ -102,6 +105,26 @@ const removeDeletedMessageId = (messageId: string): void => {
   }
 };
 
+const findGuildMember = async (id: string): Promise<GuildMember> => {
+  const guildMember = await guild.members.fetch(id);
+
+  if (!guildMember) {
+    Log.warn(`Could not find user with id ${id} in server`);
+  }
+
+  return guildMember;
+};
+
+const findGuildRole = async (id: string): Promise<Role | null> => {
+  const role = await guild.roles.fetch(id);
+
+  if (!role) {
+    Log.warn(`Could not find role with id ${id} in server`);
+  }
+
+  return role;
+};
+
 export {
   getClient,
   login,
@@ -114,4 +137,6 @@ export {
   addDeletedMessageId,
   isBotDeletedMessage,
   removeDeletedMessageId,
+  findGuildMember,
+  findGuildRole,
 };

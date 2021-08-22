@@ -3,12 +3,11 @@ import config from "../../config";
 import { Log } from "../../logging";
 import { sendDmToUser } from "../../messages";
 import getCommandContent from "../getCommandContent";
-import findGuildMember from "./findGuildMember";
-import findGuildRole from "./findGuildRole";
 import getRoleId from "./getRoleId";
+import * as Discord from "../../discord";
 
 const handleAddRoleCommand = async (message: Message) => {
-  const guildMember = await findGuildMember(message.author.id);
+  const guildMember = await Discord.findGuildMember(message.author.id);
 
   if (!guildMember) {
     Log.warn(
@@ -21,7 +20,7 @@ const handleAddRoleCommand = async (message: Message) => {
 
   const roleId = getRoleId(roleAlias);
 
-  const role = roleId ? await findGuildRole(roleId) : undefined;
+  const role = roleId ? await Discord.findGuildRole(roleId) : undefined;
 
   if (!roleId || !role) {
     Log.warn(
@@ -55,7 +54,7 @@ const handleAddRoleCommand = async (message: Message) => {
   }
 
   try {
-    guildMember.roles.add(role);
+    await guildMember.roles.add(role);
     sendDmToUser(guildMember.user, `Added role ${role.name}`, {
       author: {
         name: "ERC Bot",

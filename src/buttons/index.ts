@@ -1,79 +1,79 @@
 import {
   MessageButton,
-  InteractionButtonOptions,
-  Interaction,
   TextChannel,
   MessageActionRow,
   MessageOptions,
+  MessageEmbed,
+  Client,
 } from "discord.js";
 import { Log } from "../logging";
 import * as Discord from "../discord";
 import config from "../config";
-import { string } from "yargs";
+import ButtonRowConfig from "../types/config/buttons/buttonRowConfig";
+import ButtonConfig from "../types/config/buttons/buttonConfig";
+import onButtonInteraction from "./onInteraction";
 
-const createButton = (id: string, label: string): MessageButton =>
+const buttonRoleMap: { [key: string]: string } = {};
+
+const createButton = (config: ButtonConfig): MessageButton =>
   new MessageButton({
-    customId: id,
+    customId: config.id,
     style: "PRIMARY",
-    label: label,
+    label: config.label,
+    emoji: config.emoji,
   });
 
-const createButtonRow = (
-  buttonDetails: { id: string; label: string }[]
-): MessageButton[] =>
-  buttonDetails.map((detail) => createButton(detail.id, detail.label));
+const createButtons = (buttonsConfig: ButtonConfig[]): MessageButton[] =>
+  buttonsConfig.map((config) => createButton(config));
 
 const createButtonMessage = (
-  content: string,
-  buttonDetails: { id: string; label: string }[]
-): MessageOptions => ({
-  embeds: [
-    {
-      title: content,
-    },
-  ],
-  components: [
-    new MessageActionRow({ components: createButtonRow(buttonDetails) }),
-  ],
-});
+  buttonRowConfig: ButtonRowConfig
+): MessageOptions => {
+  const embed = new MessageEmbed();
 
-const sendButtonMessage = (messageOptions: MessageOptions) => {
-  const client = Discord.getClient();
+  if (buttonRowConfig.message.content) {
+    embed.addField(
+      buttonRowConfig.message.title,
+      buttonRowConfig.message.content
+    );
+  }
 
+  return {
+    embeds: [embed],
+    components: [
+      new MessageActionRow({
+        components: createButtons(buttonRowConfig.buttons),
+      }),
+    ],
+  };
+};
+
+const createButtonMessages = async (client: Client) => {
   const roleChannel = client.channels.cache.get(
     config.discord.roleChannelId
   ) as TextChannel;
 
-  roleChannel.send(messageOptions);
+  const messagesExist =
+    (await roleChannel.messages.fetch({ limit: 1 })).size > 0;
+
+  config.buttons.buttonRows.forEach((row: ButtonRowConfig) => {
+    row.buttons.forEach((b) => (buttonRoleMap[b.id] = b.roleId));
+
+    if (!messagesExist) {
+      const message = createButtonMessage(row);
+      roleChannel.send(message);
+    }
+  });
 };
 
-const initButtons = () => {
+const initButtons = async () => {
   Log.debug("Initiating buttons...");
 
-  const dataCenterMessage = createButtonMessage("Choose your datacenter", [
-    { id: "chaos_data_center", label: "Chaos" },
-    { id: "light_data_center", label: "Light" },
-  ]);
-  sendButtonMessage(dataCenterMessage);
-
-  const rolesMessage = createButtonMessage("Choose your role(s)", [
-    { id: "tank_role", label: "Tank" },
-    { id: "healer_role", label: "Healer" },
-    { id: "melee_dps_role", label: "Melee" },
-    { id: "ranged_dps_role", label: "Ranged" },
-    { id: "caster_dps_role", label: "Caster" },
-  ]);
-  sendButtonMessage(rolesMessage);
-
-  const raidLeadMessage = createButtonMessage("Add or remove raid leader", [
-    { id: "raid_leader", label: "Raid Leader" },
-  ]);
-  sendButtonMessage(raidLeadMessage);
-
   const client = Discord.getClient();
-  client.on("interactionCreate", (interaction: Interaction) => {
-    Log.debug(JSON.stringify(interaction));
-  });
+
+  await createButtonMessages(client);
+
+  client.on("interactionCreate", onButtonInteraction(buttonRoleMap));
 
   Log.debug("Buttons initiated!");
 };
