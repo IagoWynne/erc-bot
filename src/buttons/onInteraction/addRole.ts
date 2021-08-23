@@ -20,7 +20,10 @@ const addRole = async (
       interaction
     );
 
-    sendInteractionReply(interaction, `Added role ${role.name}.`);
+    sendInteractionReply(
+      interaction,
+      `You've assigned yourself the role ${role.name}. To remove it, press the button again.`
+    );
   } catch (e) {
     Log.error(e);
 
