@@ -19,7 +19,7 @@ intents.add(Intents.FLAGS.GUILD_MEMBERS);
 intents.add(Intents.FLAGS.DIRECT_MESSAGES);
 intents.add(Intents.FLAGS.GUILD_MESSAGES);
 
-const client = new Client({ intents });
+const client = new Client({ intents, partials: ["CHANNEL"] });
 
 let guild: Guild;
 const purgedMessageIds: { [key: string]: string[] } = {};
