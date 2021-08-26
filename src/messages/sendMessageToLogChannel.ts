@@ -2,6 +2,7 @@ import { MessageEmbed, TextChannel } from "discord.js";
 import * as Discord from "../discord";
 import config from "../config";
 import LogChannelMessage from "../types/monitor/LogChannelMessage";
+import { splitEvery } from "ramda";
 
 const sendMessageToLogChannel = (info: LogChannelMessage): void => {
   const channel = Discord.getClient().channels.cache.get(
@@ -17,8 +18,14 @@ const sendMessageToLogChannel = (info: LogChannelMessage): void => {
     timestamp: Date.now(),
   });
 
-  if (info.content) {
+  if (info.content && info.content.length < 1024) {
     messageEmbed.addField("Content", info.content);
+  } else if (info.content) {
+    const fields = splitEvery(1000, info.content);
+
+    fields.forEach((f: string, idx: number) =>
+      messageEmbed.addField(`Content ${idx + 1}`, f)
+    );
   }
 
   if (info.attachmentUrls) {
