@@ -5,7 +5,6 @@ import { initLogging, Log } from "./logging";
 import initMonitor from "./monitor";
 import initPurge from "./purge";
 import initThrottling from "./throttling";
-import initWelcomeMessage from "./welcome";
 
 initLogging();
 
@@ -20,7 +19,6 @@ client.on("ready", async () => {
   await initCommands();
   initPurge();
   initThrottling();
-  await initWelcomeMessage();
   await initButtons();
 
   Log.info("Bot started. Press Ctrl+C to terminate.");
