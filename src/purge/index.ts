@@ -74,7 +74,13 @@ const deleteAllMessagesInChannel = async (
 
     const fetchedMessageIds = fetchedMessages.map((m) => m.id);
     Discord.addPurgedMessageIds(channel.id, fetchedMessageIds);
-    await channel.bulkDelete(fetchedMessages, true);
+
+    try {
+      await channel.bulkDelete(fetchedMessages, true);
+    } catch (e) {
+      Log.error(e);
+    }
+
     fetchedMessages = await fetch100Messages(channel);
     messagesDeleted += fetchedMessages.size;
   }
