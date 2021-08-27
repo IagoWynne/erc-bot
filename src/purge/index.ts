@@ -63,7 +63,13 @@ const deleteAllMessagesInChannel = async (
     );
 
     if (oldMessages) {
-      oldMessages.forEach((m) => channel.messages.delete(m));
+      oldMessages.forEach((m) => {
+        try {
+          channel.messages.delete(m);
+        } catch (e) {
+          Log.error(e);
+        }
+      });
     }
 
     const fetchedMessageIds = fetchedMessages.map((m) => m.id);

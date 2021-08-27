@@ -33,7 +33,7 @@ const login = () => {
     Log.error(e);
   });
   client.on("shardDisconnect", () => {
-    Log.info("Bot has been disconnected. Restarting.");
+    Log.info("Bot has been irrevocably disconnected. Restarting.");
     exit;
   });
 };
