@@ -29,6 +29,13 @@ const getClient = (): Client => client;
 
 const login = () => {
   client.login(config.discord.token);
+  client.on("error", (e: Error) => {
+    Log.error(e);
+  });
+  client.on("shardDisconnect", () => {
+    Log.info("Bot has been disconnected. Restarting.");
+    exit;
+  });
 };
 
 const fetchGuild = async () => {
