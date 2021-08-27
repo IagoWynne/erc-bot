@@ -55,10 +55,20 @@ const deleteAllMessagesInChannel = async (
   let fetchedMessages = await fetch100Messages(channel);
   let messagesDeleted = fetchedMessages.size;
 
+  const minBulkDeletableTimestamp = Date.now() - (13 * 24 + 23) * 3600 * 1000;
+
   while (fetchedMessages.size > 0) {
+    const oldMessages = fetchedMessages.filter(
+      (m) => m.createdTimestamp < minBulkDeletableTimestamp
+    );
+
+    if (oldMessages) {
+      oldMessages.forEach((m) => channel.messages.delete(m));
+    }
+
     const fetchedMessageIds = fetchedMessages.map((m) => m.id);
     Discord.addPurgedMessageIds(channel.id, fetchedMessageIds);
-    await channel.bulkDelete(fetchedMessages);
+    await channel.bulkDelete(fetchedMessages, true);
     fetchedMessages = await fetch100Messages(channel);
     messagesDeleted += fetchedMessages.size;
   }
