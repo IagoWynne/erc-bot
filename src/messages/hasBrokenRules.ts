@@ -1,4 +1,5 @@
 import { replace, match } from "ramda";
+import { Log } from "../logging";
 import ThrottlingConfig from "../types/config/discord/throttlingConfig";
 import BrokenRulesInfo from "../types/config/throttling/brokenRulesInfo";
 
@@ -10,7 +11,7 @@ const hasTooManyNewLines = (
   newLinesLimit?: number
 ): boolean => (newLinesLimit ? newLines > newLinesLimit : false);
 
-export const getMessageCharacters = replace(/\<(.*?)\>/, "");
+export const getMessageCharacters = replace(/\<(.*?)\>/g, "e");
 
 const hasBrokenLfmRules = (
   advert: string,
