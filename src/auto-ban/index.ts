@@ -15,12 +15,16 @@ const initAutoBan = () => {
 const onMessageCreatedOrUpdated = async (
   message: Message | PartialMessage
 ): Promise<void> => {
-  message = await message.fetch(true);
+  try {
+    message = await message.fetch(true);
+  } catch (e) {
+    // message already deleted, do nothing
+    return;
+  }
+
   if (!hasBlacklistedPhrase(message)) {
     return;
   }
-  console.log("CHEESE");
-
   const actions = [deleteTriggerMessage(message), banUser(message.author)];
 
   await Promise.all(actions);
@@ -30,7 +34,6 @@ const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean =>
   config.blacklistedPhrases.some((bl) => message.content?.includes(bl));
 
 const banUser = async (user: User | null) => {
-  console.log("CHEESE 2");
   if (!user) {
     return;
   }
