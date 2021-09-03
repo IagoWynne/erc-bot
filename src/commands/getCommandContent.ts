@@ -1,6 +1,6 @@
-import { replace } from "ramda";
+import { replace, toLower } from "ramda";
 
 const getCommandContent = (content: string): string =>
-  replace(/([^\s]+)\s/, "", content);
+  toLower(replace(/([^\s]+)\s/, "", content));
 
 export default getCommandContent;
