@@ -18,6 +18,7 @@ const intents = new Intents(Intents.FLAGS.GUILDS);
 intents.add(Intents.FLAGS.GUILD_MEMBERS);
 intents.add(Intents.FLAGS.DIRECT_MESSAGES);
 intents.add(Intents.FLAGS.GUILD_MESSAGES);
+intents.add(Intents.FLAGS.GUILD_BANS);
 
 const client = new Client({ intents, partials: ["CHANNEL"] });
 

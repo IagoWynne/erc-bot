@@ -163,6 +163,7 @@ const config: Config = {
       },
     ],
   },
+  blacklistedPhrases: ["example phrase 1", "www.example-url.example"],
 };
 
 export default config;

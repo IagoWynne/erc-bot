@@ -1,3 +1,4 @@
+import initAutoBan from "./auto-ban";
 import initButtons from "./buttons";
 import initCommands from "./commands";
 import * as Discord from "./discord";
@@ -20,8 +21,9 @@ client.on("ready", async () => {
   initPurge();
   initThrottling();
   await initButtons();
+  initAutoBan();
 
-  Log.info("Bot started. Press Ctrl+C to terminate.");
+  Log.info("Bot started. Press Ctrl+C or kill docker container to terminate.");
 });
 
 Discord.login();
