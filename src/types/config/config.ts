@@ -8,4 +8,5 @@ export default interface Config {
   logging: LoggingConfig;
   commands: CommandsConfig;
   buttons: ButtonsConfig;
+  blacklistedPhrases: string[];
 }
