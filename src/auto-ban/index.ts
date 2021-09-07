@@ -45,9 +45,9 @@ const banUser = async (user: User | null) => {
   try {
     const guildMember = await Discord.findGuildMember(user.id);
 
-    // await guildMember.ban({
-    //   reason: "Sent message(s) with blacklisted phrase(s).",
-    // });
+    await guildMember.ban({
+      reason: "Sent message(s) with blacklisted phrase(s).",
+    });
 
     sendSuccessfulBanMessage(user);
   } catch (e) {
