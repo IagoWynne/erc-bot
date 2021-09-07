@@ -26,8 +26,15 @@ const onMessageCreatedOrUpdated = async (
   await Promise.all(actions);
 };
 
-const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean =>
-  config.blacklistedPhrases.some((bl) => message.content?.includes(bl));
+const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean => {
+  if (!message.content) {
+    return false;
+  }
+  const lowerMessageContent = message.content.toLowerCase();
+  return config.blacklistedPhrases.some((bl) =>
+    lowerMessageContent.includes(bl.toLowerCase())
+  );
+};
 
 const banUser = async (user: User | null) => {
   console.log("CHEESE 2");
@@ -38,9 +45,9 @@ const banUser = async (user: User | null) => {
   try {
     const guildMember = await Discord.findGuildMember(user.id);
 
-    await guildMember.ban({
-      reason: "Sent message(s) with blacklisted phrase(s).",
-    });
+    // await guildMember.ban({
+    //   reason: "Sent message(s) with blacklisted phrase(s).",
+    // });
 
     sendSuccessfulBanMessage(user);
   } catch (e) {
