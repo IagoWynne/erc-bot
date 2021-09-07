@@ -30,8 +30,15 @@ const onMessageCreatedOrUpdated = async (
   await Promise.all(actions);
 };
 
-const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean =>
-  config.blacklistedPhrases.some((bl) => message.content?.includes(bl));
+const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean => {
+  if (!message.content) {
+    return false;
+  }
+  const lowerMessageContent = message.content.toLowerCase();
+  return config.blacklistedPhrases.some((bl) =>
+    lowerMessageContent.includes(bl.toLowerCase())
+  );
+};
 
 const banUser = async (user: User | null) => {
   if (!user) {
