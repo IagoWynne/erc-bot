@@ -29,14 +29,18 @@ const botDeletedMessageIds: string[] = [];
 const getClient = (): Client => client;
 
 const login = () => {
-  client.login(config.discord.token);
-  client.on("error", (e: Error) => {
+  try {
+    client.login(config.discord.token);
+    client.on("error", (e: Error) => {
+      Log.error(e);
+    });
+    client.on("shardDisconnect", () => {
+      Log.info("Bot has been irrevocably disconnected. Restarting.");
+      exit;
+    });
+  } catch (e) {
     Log.error(e);
-  });
-  client.on("shardDisconnect", () => {
-    Log.info("Bot has been irrevocably disconnected. Restarting.");
-    exit;
-  });
+  }
 };
 
 const fetchGuild = async () => {

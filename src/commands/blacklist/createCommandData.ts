@@ -1,10 +1,20 @@
 import { ApplicationCommandData } from "discord.js";
+import config from "../../config";
 import * as Discord from "../../discord";
 
 const createCommandData = async (): Promise<void> => {
   const guild = Discord.getGuild();
 
-  await guild.commands.create(commandData);
+  const command = await guild.commands.create(commandData);
+  await command.permissions.add({
+    permissions: [
+      {
+        id: config.discord.adminRoleId,
+        type: "ROLE",
+        permission: true,
+      },
+    ],
+  });
 };
 
 const commandData: ApplicationCommandData = {
@@ -44,7 +54,7 @@ const commandData: ApplicationCommandData = {
       ],
     },
   ],
-  defaultPermission: true,
+  defaultPermission: false,
 };
 
 export default createCommandData;
