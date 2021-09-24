@@ -21,7 +21,7 @@ client.on("ready", async () => {
   initPurge();
   initThrottling();
   await initButtons();
-  initAutoBan();
+  await initAutoBan();
 
   Log.info("Bot started. Press Ctrl+C or kill docker container to terminate.");
 });

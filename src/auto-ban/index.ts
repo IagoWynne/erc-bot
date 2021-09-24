@@ -1,15 +1,29 @@
 import { Message, PartialMessage, User } from "discord.js";
-import { any, find, includes } from "ramda";
 import config from "../config";
 import * as Discord from "../discord";
 import { Log } from "../logging";
 import { deleteTriggerMessage, sendMessageToLogChannel } from "../messages";
+import { Blacklist } from "../data";
 
-const initAutoBan = () => {
+const initAutoBan = async () => {
+  Log.debug("Initiating auto-ban...");
+  Log.debug("Retrieving blacklisted phrases...");
+
+  await Blacklist.fetch();
+
+  Log.debug("Blacklisted phrases retrieved!");
+
+  if (Blacklist.get().length === 0) {
+    Log.debug("No blacklisted phrases in database. Adding from config...");
+    await Blacklist.bulkAdd(config.blacklistedPhrases);
+    Log.debug("Blacklisted phrases added to database!");
+  }
+
   const client = Discord.getClient();
 
   client.on("messageCreate", onMessageCreatedOrUpdated);
   client.on("messageUpdate", onMessageCreatedOrUpdated);
+  Log.debug("Auto-ban initiated!");
 };
 
 const onMessageCreatedOrUpdated = async (
@@ -35,7 +49,7 @@ const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean => {
     return false;
   }
   const lowerMessageContent = message.content.toLowerCase();
-  return config.blacklistedPhrases.some((bl) =>
+  return Blacklist.get().some((bl) =>
     lowerMessageContent.includes(bl.toLowerCase())
   );
 };

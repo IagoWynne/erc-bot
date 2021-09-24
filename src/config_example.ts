@@ -6,6 +6,7 @@ const config: Config = {
     logChannelId: "12345",
     roleChannelId: "12345",
     guildId: "12345",
+    adminRoleId: "1234",
     logColours: {
       userJoined: 0,
       userLeft: 0,
