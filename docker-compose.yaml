@@ -1,7 +1,25 @@
 version: "3"
+networks:
+  erc-bot:
+    external: false
+
 services:
+  erc-mongo:
+    networks:
+      - erc-bot
+    image: mongo:4.2
+    container_name: erc-mongo
+    restart: unless-stopped
+    volumes:
+      - ./erc-mongo:/data/db
+    ports:
+      - 27017:27017
   bot:
+    networks:
+      - erc-bot
     build:
       context: .
       dockerfile: .dockerfile
     restart: on-failure
+    depends_on:
+      - erc-mongo

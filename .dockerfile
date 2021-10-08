@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:16.6.1
 WORKDIR /app
 COPY . .
 RUN npm install

@@ -5,11 +5,14 @@ import { Log } from "../logging";
 import { deleteTriggerMessage } from "../messages";
 import shouldProcess from "./preProcessing/shouldProcess";
 import getCommand from "./preProcessing/getCommand";
+import initBlacklistCommands from "./blacklist";
 
 const initCommands = async () => {
   Log.debug("Initiating command handlers...");
   const client = Discord.getClient();
   await Discord.fetchGuild();
+
+  await initBlacklistCommands();
 
   client.on(
     "messageCreate",

@@ -6,6 +6,7 @@ const config: Config = {
     logChannelId: "12345",
     roleChannelId: "12345",
     guildId: "12345",
+    adminRoleId: "1234",
     logColours: {
       userJoined: 0,
       userLeft: 0,
@@ -164,6 +165,9 @@ const config: Config = {
     ],
   },
   blacklistedPhrases: ["example phrase 1", "www.example-url.example"],
+  database: {
+    url: "erc-mongo:27017/erc-bot",
+  },
 };
 
 export default config;
