@@ -1,6 +1,8 @@
 import { CommandInteraction } from "discord.js";
+import config from "../../config";
 import { Blacklist } from "../../data";
 import { Log } from "../../logging";
+import { sendMessageToLogChannel } from "../../messages";
 
 const handleAddToBlacklist = async (interaction: CommandInteraction) => {
   try {
@@ -17,6 +19,13 @@ const handleAddToBlacklist = async (interaction: CommandInteraction) => {
 
     await Blacklist.add(item);
     await Blacklist.fetch();
+
+    sendMessageToLogChannel({
+      author: { name: "erc-bot" },
+      colour: config.discord.logColours.commandUsed,
+      title: "Item added to blacklist",
+      description: `Added: ${item}\n${interaction.user.tag} - ${interaction.user.id}`,
+    });
 
     interaction.reply({
       ephemeral: true,

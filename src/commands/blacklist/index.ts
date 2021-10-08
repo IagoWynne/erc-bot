@@ -20,6 +20,10 @@ const onCommandInteraction = async (interaction: Interaction) => {
 
   const subCommand = interaction.options.getSubcommand();
 
+  Log.debug(
+    `Blacklist interaction detected. User: ${interaction.user.tag} - ${interaction.user.id}. Subcommand: ${subCommand}.`
+  );
+
   switch (subCommand) {
     case "add":
       handleAddToBlacklist(interaction);
