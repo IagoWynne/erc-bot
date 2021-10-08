@@ -165,6 +165,9 @@ const config: Config = {
     ],
   },
   blacklistedPhrases: ["example phrase 1", "www.example-url.example"],
+  database: {
+    url: "erc-mongo:27017/erc-bot",
+  },
 };
 
 export default config;

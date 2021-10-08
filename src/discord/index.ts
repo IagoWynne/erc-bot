@@ -28,9 +28,9 @@ const botDeletedMessageIds: string[] = [];
 
 const getClient = (): Client => client;
 
-const login = () => {
+const login = async () => {
   try {
-    client.login(config.discord.token);
+    await client.login(config.discord.token);
     client.on("error", (e: Error) => {
       Log.error(e);
     });
