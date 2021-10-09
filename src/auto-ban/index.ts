@@ -20,7 +20,6 @@ const initAutoBan = async () => {
     Log.debug("Blacklisted phrases added to database!");
   }
 
-const initAutoBan = () => {
   const client = Discord.getClient();
 
   client.on("messageCreate", onMessageCreatedOrUpdated);
@@ -64,7 +63,6 @@ const kickOrBanUser = async (user: User | null) => {
   if (!user) {
     return;
   }
-
 
   const mongoClient = new MongoClient(`mongodb://${config.database.url}`);
 
@@ -141,7 +139,6 @@ const banUser = async (user: User) => {
   }
 };
 
-
 const sendSuccessfulKickMessage = (user: User) => {
   sendMessageToLogChannel({
     author: {
@@ -164,7 +161,7 @@ const sendFailedKickMessage = (user: User) =>
     description: `Could not kick user for message(s) with blacklisted phrase(s). Check error logs for further details.\n${user.tag} - ${user.id}`,
     alertAdmin: true,
   });
-  
+
 const sendSuccessfulBanMessage = (user: User) =>
   sendMessageToLogChannel({
     author: {
