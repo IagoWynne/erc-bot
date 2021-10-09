@@ -7,6 +7,7 @@ const config: Config = {
     roleChannelId: "12345",
     guildId: "12345",
     adminRoleId: "1234",
+    blacklistKickCooldownHours: 24,
     logColours: {
       userJoined: 0,
       userLeft: 0,

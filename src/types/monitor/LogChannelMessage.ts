@@ -9,4 +9,5 @@ export default interface LogChannelMessage {
   content?: string;
   url?: string;
   attachmentUrls?: string[];
+  alertAdmin?: boolean;
 }
