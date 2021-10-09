@@ -8,4 +8,6 @@ export default interface DiscordConfig {
   logColours: LogMessageColours;
   channels: ChannelConfig[];
   roleChannelId: string;
+  adminRoleId: string;
+  blacklistKickCooldownHours: number;
 }

@@ -1,5 +1,6 @@
 import ButtonsConfig from "./buttons/buttonsConfig";
 import CommandsConfig from "./commands/commandsConfig";
+import DatabaseConfig from "./database/databaseConfig";
 import DiscordConfig from "./discord/discordConfig";
 import LoggingConfig from "./logging/loggingConfig";
 
@@ -9,4 +10,5 @@ export default interface Config {
   commands: CommandsConfig;
   buttons: ButtonsConfig;
   blacklistedPhrases: string[];
+  database: DatabaseConfig;
 }
