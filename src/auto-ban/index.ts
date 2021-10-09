@@ -4,6 +4,7 @@ import * as Discord from "../discord";
 import { Log } from "../logging";
 import { deleteTriggerMessage, sendMessageToLogChannel } from "../messages";
 import { Blacklist } from "../data";
+import { Collection, MongoClient } from "mongodb";
 
 const initAutoBan = async () => {
   Log.debug("Initiating auto-ban...");
@@ -39,7 +40,10 @@ const onMessageCreatedOrUpdated = async (
   if (!hasBlacklistedPhrase(message)) {
     return;
   }
-  const actions = [deleteTriggerMessage(message), banUser(message.author)];
+  const actions = [
+    deleteTriggerMessage(message),
+    kickOrBanUser(message.author),
+  ];
 
   await Promise.all(actions);
 };
@@ -54,17 +58,78 @@ const hasBlacklistedPhrase = (message: Message | PartialMessage): boolean => {
   );
 };
 
-const banUser = async (user: User | null) => {
+const kickOrBanUser = async (user: User | null) => {
   if (!user) {
     return;
   }
 
+  const mongoClient = new MongoClient(`mongodb://${config.database.url}`);
+
+  await mongoClient.connect();
+  const db = mongoClient.db();
+  const collection = db.collection("blacklistedUsers");
+
+  if (!(await hasUserPostedBlacklistedPhrasesRecently(user, collection))) {
+    await kickUser(user);
+    await logUserBlacklistPost(user, collection);
+  } else {
+    await banUser(user);
+    await logUserBlacklistPost(user, collection);
+  }
+
+  mongoClient.close();
+};
+
+const hasUserPostedBlacklistedPhrasesRecently = async (
+  user: User,
+  collection: Collection
+): Promise<boolean> => {
+  const blacklistRecord = await collection.findOne({ userId: user.id });
+
+  if (!blacklistRecord) {
+    await collection.insertOne({ userId: user.id });
+    return false;
+  }
+
+  const recent = new Date();
+  recent.setHours(
+    recent.getHours() - config.discord.blacklistKickCooldownHours
+  );
+
+  return blacklistRecord.timestamp > recent;
+};
+
+const logUserBlacklistPost = async (user: User, collection: Collection) => {
+  await collection.findOneAndUpdate(
+    { userId: user.id },
+    { $set: { timestamp: new Date() } }
+  );
+};
+
+const kickUser = async (user: User) => {
+  try {
+    const guildMember = await Discord.findGuildMember(user.id);
+
+    await guildMember.kick("Sent message(s) with blacklisted phrase(s)");
+
+    Log.info(`Kicked user ${user.tag} (${user.id}) for blacklist violation.`);
+
+    sendSuccessfulKickMessage(user);
+  } catch (e) {
+    Log.error(e);
+    sendFailedKickMessage(user);
+  }
+};
+
+const banUser = async (user: User) => {
   try {
     const guildMember = await Discord.findGuildMember(user.id);
 
     await guildMember.ban({
-      reason: "Sent message(s) with blacklisted phrase(s).",
+      reason: "Repeatedly sent message(s) with blacklisted phrase(s).",
     });
+
+    Log.info(`Banned user ${user.tag} (${user.id}) for blacklist violation.`);
 
     sendSuccessfulBanMessage(user);
   } catch (e) {
@@ -72,6 +137,29 @@ const banUser = async (user: User | null) => {
     sendFailedBanMessage(user);
   }
 };
+
+const sendSuccessfulKickMessage = (user: User) => {
+  sendMessageToLogChannel({
+    author: {
+      name: "ERC Bot",
+    },
+    colour: config.discord.logColours.botUpdate,
+    title: "Kicked User",
+    description: `Kicked user for message(s) with blacklisted phrase(s).\n${user.tag} - ${user.id}`,
+    alertAdmin: true,
+  });
+};
+
+const sendFailedKickMessage = (user: User) =>
+  sendMessageToLogChannel({
+    author: {
+      name: "ERC Bot",
+    },
+    colour: config.discord.logColours.commandError,
+    title: "Kick User Failed",
+    description: `Could not kick user for message(s) with blacklisted phrase(s). Check error logs for further details.\n${user.tag} - ${user.id}`,
+    alertAdmin: true,
+  });
 
 const sendSuccessfulBanMessage = (user: User) =>
   sendMessageToLogChannel({
@@ -81,6 +169,7 @@ const sendSuccessfulBanMessage = (user: User) =>
     colour: config.discord.logColours.botUpdate,
     title: "Banned User",
     description: `Banned user for message(s) with blacklisted phrase(s).\n${user.tag} - ${user.id}`,
+    alertAdmin: true,
   });
 
 const sendFailedBanMessage = (user: User) =>
@@ -91,6 +180,7 @@ const sendFailedBanMessage = (user: User) =>
     colour: config.discord.logColours.commandError,
     title: "Ban User Failed",
     description: `Could not ban user for message(s) with blacklisted phrase(s). Check error logs for further details.\n${user.tag} - ${user.id}`,
+    alertAdmin: true,
   });
 
 export default initAutoBan;

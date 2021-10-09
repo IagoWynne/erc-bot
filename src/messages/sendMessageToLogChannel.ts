@@ -33,8 +33,10 @@ const sendMessageToLogChannel = (info: LogChannelMessage): void => {
   }
 
   channel.send({ embeds: [messageEmbed] });
-};
 
-const getTimeStamp = () => `<t:${Math.floor(Date.now() / 1000)}>`;
+  if (info.alertAdmin) {
+    channel.send(`<@&${config.discord.adminRoleId}>`);
+  }
+};
 
 export default sendMessageToLogChannel;

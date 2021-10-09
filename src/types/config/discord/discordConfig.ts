@@ -9,4 +9,5 @@ export default interface DiscordConfig {
   channels: ChannelConfig[];
   roleChannelId: string;
   adminRoleId: string;
+  blacklistKickCooldownHours: number;
 }
