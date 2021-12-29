@@ -38,7 +38,7 @@ const login = async () => {
       Log.info("Bot has been irrevocably disconnected. Restarting.");
       exit;
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
   }
 };
@@ -61,7 +61,7 @@ const fetchGuild = async () => {
     try {
       await guild.members.fetch();
       await guild.emojis.fetch();
-    } catch (e) {
+    } catch (e: any) {
       Log.error(e);
     }
 
