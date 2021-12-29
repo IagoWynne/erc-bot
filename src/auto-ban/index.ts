@@ -116,7 +116,7 @@ const kickUser = async (user: User) => {
     Log.info(`Kicked user ${user.tag} (${user.id}) for blacklist violation.`);
 
     sendSuccessfulKickMessage(user);
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     sendFailedKickMessage(user);
   }
@@ -133,7 +133,7 @@ const banUser = async (user: User) => {
     Log.info(`Banned user ${user.tag} (${user.id}) for blacklist violation.`);
 
     sendSuccessfulBanMessage(user);
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     sendFailedBanMessage(user);
   }

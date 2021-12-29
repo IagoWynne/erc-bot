@@ -5,13 +5,13 @@ import getUserName from "../../messages/getUserName";
 import ThrottlingConfig from "../../types/config/discord/throttlingConfig";
 import BrokenRulesInfo from "../../types/config/throttling/brokenRulesInfo";
 
-const onRulesBroken = (
+const onRulesBroken = async (
   message: Message,
   brokenRules: BrokenRulesInfo,
   throttlingConfig: ThrottlingConfig
 ) => {
   deleteTriggerMessage(message);
-  sendDmToUser(
+  await sendDmToUser(
     message.author,
     `Hello, ${getUserName(
       null,
@@ -37,6 +37,11 @@ const onRulesBroken = (
         message.author.tag
       } - ${message.author.id}`,
     }
+  );
+  await sendDmToUser(
+    message.author,
+    `Your ad: 
+    ${message.content}`
   );
 };
 
