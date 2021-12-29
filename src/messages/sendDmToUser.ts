@@ -6,14 +6,16 @@ import sendMessageToLogChannel from "./sendMessageToLogChannel";
 const sendDmToUser = async (
   user: User,
   message: string,
-  chatLogEntry: LogChannelMessage
+  chatLogEntry?: LogChannelMessage
 ) => {
   Log.debug(`Sending DM to user ${user.tag}: ${message}`);
 
   try {
     await user.send(message);
-    sendMessageToLogChannel(chatLogEntry);
-  } catch (e) {
+    if (chatLogEntry) {
+      sendMessageToLogChannel(chatLogEntry);
+    }
+  } catch (e: any) {
     Log.error(e);
   }
 };
