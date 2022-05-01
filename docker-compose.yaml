@@ -19,7 +19,8 @@ services:
       - erc-bot
     build:
       context: .
-      dockerfile: .dockerfile
+      dockerfile: .dockerfile#
+      network: host
     restart: on-failure
     depends_on:
       - erc-mongo
