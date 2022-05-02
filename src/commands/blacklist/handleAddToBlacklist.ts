@@ -31,7 +31,7 @@ const handleAddToBlacklist = async (interaction: CommandInteraction) => {
       ephemeral: true,
       content: `Added ${item} to the blacklist.`,
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     interaction.reply({
       ephemeral: true,

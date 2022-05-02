@@ -24,7 +24,7 @@ const addRole = async (
       interaction,
       `You've assigned yourself the role ${role.name}. To remove it, press the button again.`
     );
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
 
     sendCommandErrorMessage(

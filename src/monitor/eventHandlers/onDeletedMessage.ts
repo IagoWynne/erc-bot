@@ -14,6 +14,7 @@ import getUserName from "../../messages/getUserName";
 import getUserTag from "../chatLog/getUserTag";
 import { sendMessageToLogChannel } from "../../messages";
 import * as Discord from "../../discord";
+import { sleep } from "../../utils";
 
 const getUserWhoDeletedMessage = async (
   message: Message | PartialMessage
@@ -23,7 +24,7 @@ const getUserWhoDeletedMessage = async (
     return "ERC Bot";
   }
 
-  await Util.delayFor(900);
+  await sleep(900);
   try {
     Log.debug("Fetching audit logs...");
     const fetchedLogs = await message.guild?.fetchAuditLogs({
@@ -43,7 +44,7 @@ const getUserWhoDeletedMessage = async (
         ? `${auditEntry.executor.tag} - ${auditEntry.executor.id}`
         : "Unknown - probably other user";
     }
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     return "Unknown - error retrieving Discord Audit Logs";
   }

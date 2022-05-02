@@ -31,7 +31,7 @@ const handleRemovedFromBlacklist = async (interaction: CommandInteraction) => {
       ephemeral: true,
       content: `Removed ${item} from the blacklist.`,
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     interaction.reply({
       ephemeral: true,

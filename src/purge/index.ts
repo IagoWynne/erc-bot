@@ -66,7 +66,7 @@ const deleteAllMessagesInChannel = async (
       oldMessages.forEach((m) => {
         try {
           channel.messages.delete(m);
-        } catch (e) {
+        } catch (e: any) {
           Log.error(e);
         }
       });
@@ -77,7 +77,7 @@ const deleteAllMessagesInChannel = async (
 
     try {
       await channel.bulkDelete(fetchedMessages, true);
-    } catch (e) {
+    } catch (e: any) {
       Log.error(e);
     }
 

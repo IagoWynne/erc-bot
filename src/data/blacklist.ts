@@ -20,7 +20,7 @@ const updateMongoDocument = async () => {
     );
     await mongoClient.close();
     Log.debug("Blacklist update complete.");
-  } catch (e) {
+  } catch (e: any) {
     sendMessageToLogChannel({
       author: {
         name: "ERC Bot",
