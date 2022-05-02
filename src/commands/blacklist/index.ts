@@ -7,7 +7,7 @@ import handleViewBlacklist from "./handleViewBlacklist";
 import handleRemovedFromBlacklist from "./handleRemoveFromBlacklist";
 
 const initBlacklistCommands = async () => {
-  await createCommandData();
+  // await createCommandData();
 
   const client = Discord.getClient();
   client.on("interactionCreate", onCommandInteraction);
