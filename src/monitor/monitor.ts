@@ -1,4 +1,4 @@
-import { Awaited, Message, PartialMessage } from "discord.js";
+import { Message, PartialMessage } from "discord.js";
 import { Log } from "../logging";
 import * as Discord from "../discord";
 import onJoinedServer from "./eventHandlers/onJoinedServer";
@@ -28,8 +28,8 @@ const setupListeners = () => {
 };
 
 const onMessageEvent =
-  (messageEventHandler: (message: Message | PartialMessage) => Awaited<void>) =>
-  (message: Message | PartialMessage): Awaited<void> => {
+  (messageEventHandler: (message: Message | PartialMessage) => void) =>
+  (message: Message | PartialMessage): void => {
     if (shouldLogMessage(message)) {
       messageEventHandler(message);
     }

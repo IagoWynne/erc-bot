@@ -32,7 +32,7 @@ const onMessageCreatedOrUpdated = async (
 ): Promise<void> => {
   try {
     message = await message.fetch(true);
-  } catch (e) {
+  } catch (e: any) {
     // message already deleted, do nothing
     return;
   }

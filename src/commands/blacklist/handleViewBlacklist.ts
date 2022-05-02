@@ -10,7 +10,7 @@ const handleViewBlacklist = async (interaction: CommandInteraction) => {
       ephemeral: true,
       content: `Blacklisted words/phrases:\n${blacklist.join("\n")}`,
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     interaction.reply({
       ephemeral: true,

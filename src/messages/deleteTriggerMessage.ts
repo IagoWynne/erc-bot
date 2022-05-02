@@ -11,7 +11,7 @@ const deleteTriggerMessage = async (message: Message | PartialMessage) => {
         await message.delete();
       }
     }
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
   }
 };

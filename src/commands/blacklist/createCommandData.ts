@@ -1,20 +1,9 @@
 import { ApplicationCommandData } from "discord.js";
-import config from "../../config";
 import * as Discord from "../../discord";
 
 const createCommandData = async (): Promise<void> => {
   const guild = Discord.getGuild();
-
-  const command = await guild.commands.create(commandData);
-  await command.permissions.add({
-    permissions: [
-      {
-        id: config.discord.adminRoleId,
-        type: "ROLE",
-        permission: true,
-      },
-    ],
-  });
+  await guild.commands.create(commandData);
 };
 
 const commandData: ApplicationCommandData = {

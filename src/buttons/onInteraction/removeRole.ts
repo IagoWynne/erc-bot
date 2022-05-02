@@ -24,7 +24,7 @@ const removeRole = async (
       interaction,
       `You no longer have the role ${role.name}. To re-add it, press the button again.`
     );
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
 
     sendCommandErrorMessage(
