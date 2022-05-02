@@ -63,7 +63,7 @@ const handleAddRoleCommand = async (message: Message) => {
       title: "Command Executed",
       description: `\`.iam\` command executed successfully.\nAdded role ${role.name} to user.\n${message.author.tag} - ${message.author.id}`,
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     sendDmToUser(
       guildMember.user,

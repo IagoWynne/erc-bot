@@ -12,7 +12,7 @@ const initCommands = async () => {
   const client = Discord.getClient();
   await Discord.fetchGuild();
 
-  // await initBlacklistCommands();
+  await initBlacklistCommands();
 
   client.on(
     "messageCreate",

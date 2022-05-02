@@ -64,7 +64,7 @@ const handleRemoveRoleCommand = async (message: Message) => {
       title: "Command Executed",
       description: `\`.iamnot\` command executed successfully.\nRemoved role ${role.name} from user.\n${message.author.tag} - ${message.author.id}`,
     });
-  } catch (e) {
+  } catch (e: any) {
     Log.error(e);
     sendDmToUser(
       guildMember.user,
